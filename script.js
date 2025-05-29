@@ -3,7 +3,23 @@ import {createBoardUI, createTileUI} from "./JS/UI.js";
 
 (function IIFE()
 {
-  const size = 4;
+  const BOARD_SIZE = 4;
+  let board;
+
+
+  (function init()
+  {
+    createBoardUI(BOARD_SIZE);
+    board = createBoard(BOARD_SIZE);
+      //set timeout so that the first animation plays
+    setTimeout(() =>
+    {
+      spawnInitialTiles(board);
+      handleInput();
+    }, 1000);
+  })();
+
+
 
   function createBoard(size)
   {
@@ -12,7 +28,7 @@ import {createBoardUI, createTileUI} from "./JS/UI.js";
   }
 
 
-  function initializeBoard(board) 
+  function spawnInitialTiles(board) 
   {
     addNewNumber(board);
     addNewNumber(board);
@@ -44,8 +60,6 @@ import {createBoardUI, createTileUI} from "./JS/UI.js";
     }
 
   }
-
-
 
 
   function isGameOver(board)
@@ -88,14 +102,4 @@ import {createBoardUI, createTileUI} from "./JS/UI.js";
     })
   }
 
-
-  let board = createBoard(size);
-  createBoardUI(size);
-
-  //set timeout so that the first animation plays
-  setTimeout(() =>
-  {
-    initializeBoard(board);
-    handleInput();
-  }, 500);
 })();

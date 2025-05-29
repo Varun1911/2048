@@ -23,9 +23,7 @@ export function slideLeft(board)
             newRow.push(0);
         }
 
-
         board[i] = newRow;
-
     }
 
     moveTile(board);
