@@ -1,0 +1,52 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body
+{
+    min-height: 100dvh;
+    background-color: #634a00;
+}
+
+main
+{
+    min-height: 100dvh;
+    display: grid;
+    place-content: center;
+}
+
+.board
+{
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    border: 1px solid black;
+}
+
+.row
+{
+    padding: 5px;
+    background-color: #ddbe63;
+    width: 400px;
+    height: 105px;
+    display: flex;
+    gap: 5px;
+}
+
+.col
+{
+    background-color: #fbe08e;
+    width: 95px;
+    height: 95px;
+    border-radius: 4px;
+    font-size: 2rem;
+    font-weight: bold;
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
