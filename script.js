@@ -39,7 +39,8 @@ import {createBoardUI, createTileUI} from "./JS/UI.js";
   {
     let emptyCells = [];
 
-    for (let i = 0; i < board.length; i++)
+    // for (let i = 0; i < board.length; i++)
+    for (let i = 0; i < 1; i++)
     {
       for (let j = 0; j < board[0].length; j++)
       {
@@ -92,13 +93,19 @@ import {createBoardUI, createTileUI} from "./JS/UI.js";
     {
       switch (e.key)
       {
-        case 'ArrowLeft': board = slideLeft(board); break;
-        case 'ArrowRight': board = slideRight(board); break;
-        case 'ArrowUp': board = slideUp(board); break;
-        case 'ArrowDown': board = slideDown(board); break;
+        case 'ArrowLeft': board = slideLeft(board);
+          onPlayerInput();
+          break;
+        case 'ArrowRight': board = slideRight(board);
+          onPlayerInput();
+          break;
+        case 'ArrowUp': board = slideUp(board);
+          onPlayerInput();
+          break;
+        case 'ArrowDown': board = slideDown(board);
+          onPlayerInput();
+          break;
       }
-
-      onPlayerInput();
     })
   }
 
