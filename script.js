@@ -111,11 +111,9 @@
 
 // })();
 
-class Game2048
-{
+class Game2048 {
 
-  constructor(BOARD_SIZE)
-  {
+  constructor(BOARD_SIZE) {
     this.BOARD_SIZE = BOARD_SIZE;
     this.grid = [];
     this.score = 0;
@@ -131,8 +129,7 @@ class Game2048
   }
 
 
-  createBoardUI(size)
-  {
+  createBoardUI(size) {
     const board = document.querySelector('.board');
 
     // * Dynamic board size ==
@@ -158,10 +155,8 @@ class Game2048
     board.style.gridTemplateRows = `repeat(${size}, calc(var(--TILE-SIZE) + var(--PADDING-BOARD) * 2))`;
 
 
-    for (let i = 0; i < size; i++)
-    {
-      for (let j = 0; j < size; j++)
-      {
+    for (let i = 0; i < size; i++) {
+      for (let j = 0; j < size; j++) {
         const tile = document.createElement('div');
         tile.className = `tile-container inner-shadow`;
         tile.setAttribute('data-row', i);
@@ -172,8 +167,7 @@ class Game2048
   }
 
 
-  init(size)
-  {
+  init(size) {
     this.grid = Array(size).fill().map(() => Array(size).fill(null));
     this.score = 0;
     this.gameWon = false;
@@ -194,10 +188,8 @@ class Game2048
   }
 
 
-  setupEventListeners()
-  {
-    document.addEventListener('keydown', (e) =>
-    {
+  setupEventListeners() {
+    document.addEventListener('keydown', (e) => {
       if (this.gameOver && !this.gameWon)
         return;
 
@@ -214,8 +206,7 @@ class Game2048
 
       const direction = keyMap[e.key];
 
-      if (direction)
-      {
+      if (direction) {
         e.preventDefault();
         this.move(direction);
       }
@@ -225,23 +216,18 @@ class Game2048
 
 
 
-  addNewTile()
-  {
+  addNewTile() {
     let emptyCells = [];
 
-    for (let r = 0; r < this.grid.length; r++)
-    {
-      for (let c = 0; c < this.grid[0].length; c++)
-      {
-        if (this.grid[r][c] === null)
-        {
-          emptyCells.push({r, c});
+    for (let r = 0; r < this.grid.length; r++) {
+      for (let c = 0; c < this.grid[0].length; c++) {
+        if (this.grid[r][c] === null) {
+          emptyCells.push({ r, c });
         }
       }
     }
 
-    if (emptyCells.length > 0)
-    {
+    if (emptyCells.length > 0) {
       const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
       const value = this.getRandomNumber();
       const tile = this.createTile(this.tileId++, randomCell, value, true);
@@ -257,13 +243,11 @@ class Game2048
   }
 
 
-  getRandomNumber()
-  {
+  getRandomNumber() {
     return Math.random() < 0.9 ? 2 : 4;
   }
 
-  createTile(tileId, cell, value, isNew, merged = false)
-  {
+  createTile(tileId, cell, value, isNew, merged = false) {
     const tile = {
       id: tileId,
       value: value,
@@ -277,20 +261,21 @@ class Game2048
   }
 
 
-  createTileElement(tile)
-  {
+  createTileElement(tile) {
     const board = document.querySelector('.board');
 
     const tileElement = document.createElement('div');
     tileElement.id = `tile-${tile.id}`;
     tileElement.className = `tile tile-${tile.value}`;
 
-    if (tile.isNew)
-    {
+    if (tile.isNew) {
       tileElement.classList.add('tile-new');
     }
 
-    this.setTileElementPosition(tile, tileElement);
+    const { left, top } = this.getTileElementPosition(tile);
+    tileElement.style.left = left + 'px';
+    tileElement.style.top = top + 'px';
+    tileElement.textContent = tile.value;
 
     board.appendChild(tileElement);
 
@@ -298,10 +283,8 @@ class Game2048
     const animationTimeSpawn = parseFloat(getComputedStyle(tileElement).getPropertyValue('--ANIMATION-TIME-SPAWN'));
 
 
-    if (tile.isNew)
-    {
-      setTimeout(() =>
-      {
+    if (tile.isNew) {
+      setTimeout(() => {
         tile.isNew = false;
         tileElement.classList.remove('tile-new');
       }, animationTimeSpawn * 1000);
@@ -309,23 +292,21 @@ class Game2048
   }
 
 
-  setTileElementPosition(tile, tileElement)
-  {
+  getTileElementPosition(tile) {
     const root = document.documentElement;
     const padding = parseFloat(getComputedStyle(root).getPropertyValue('--PADDING-BOARD'));
     const tileSize = parseFloat(getComputedStyle(root).getPropertyValue('--TILE-SIZE'));
-    tileElement.textContent = tile.value;
 
-    tileElement.style.left = `${tile.col * (tileSize + padding * 2) + padding * 2}px`;
-    tileElement.style.top = `${tile.row * (tileSize + padding * 2) + padding * 2}px`;
+    const left = tile.col * (tileSize + padding * 2) + padding * 2;
+    const top = tile.row * (tileSize + padding * 2) + padding * 2;
+
+    return { left, top };
   }
 
-  move(direction)
-  {
+  move(direction) {
     let moved = false;
 
-    switch (direction)
-    {
+    switch (direction) {
       case 'left':
         moved = this.moveLeft();
         break;
@@ -342,27 +323,23 @@ class Game2048
     }
 
 
-    if (moved)
-    {
+    if (moved) {
       // animate to new positions
       this.animateTiles();
 
       // move animation time in sec
-      const animationTimeMove = parseFloat(getComputedStyle(document.querySelector('.tile-moved')).getPropertyValue('--ANIMATION-TIME-MOVE'));
+      const animationTimeMove = 0.15;
 
       // check game state and add tile
-      setTimeout(() =>
-      {
+      setTimeout(() => {
         this.addNewTile();
 
-        if (!this.gameWon && this.hasWon())
-        {
+        if (!this.gameWon && this.hasWon()) {
           this.gameWon = true;
           this.showGameWon();
         }
 
-        else if (isGameOver())
-        {
+        else if (this.isGameOver()) {
           this.gameOver = true;
           this.showGameOver();
         }
@@ -372,27 +349,23 @@ class Game2048
   }
 
 
-  moveLeft()
-  {
+  moveLeft() {
     let moved = false;
 
-    for (let r = 0; r < this.BOARD_SIZE; r++)
-    {
+    for (let r = 0; r < this.BOARD_SIZE; r++) {
       let row = this.grid[r].filter(item => item !== null);
       let newRow = Array(this.BOARD_SIZE).fill(null);
       let col = 0;
 
-      for (let i = 0; i < row.length; i++)
-      {
+      for (let i = 0; i < row.length; i++) {
         // check for merge
         const tile = row[i];
-        if (i < row.length - 1 && row[i + 1] === tile)
-        {
+        if (i < row.length - 1 && row[i + 1].value === tile.value) {
 
           // merge tiles
-          const cell = {r: r, c: col};
-          const value = this.getRandomNumber();
-          const mergedTile = this.createTile(tile.id, cell, value, false, true);
+          const cell = { r: r, c: col };
+          const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
+          console.log(mergedTile);
 
           newRow[col] = mergedTile;
           this.tiles.set(tile.id, mergedTile);
@@ -400,8 +373,7 @@ class Game2048
 
           // remove the merged tile 
           const mergedTileElement = document.querySelector(`#tile-${row[i + 1].id}`);
-          if (mergedTileElement)
-          {
+          if (mergedTileElement) {
             mergedTileElement.remove();
           }
           this.tiles.delete(row[i + 1].id);
@@ -411,8 +383,7 @@ class Game2048
         }
 
         // if not merged
-        else
-        {
+        else {
           // updated the row and col
           tile.row = r;
           tile.col = col;
@@ -426,12 +397,10 @@ class Game2048
       }
 
       // check if anything moved
-      for (let c = 0; c < BOARD_SIZE; c++)
-      {
+      for (let c = 0; c < BOARD_SIZE; c++) {
         if ((this.grid[r][c] !== null) ^ (newRow[c] !== null) ||
           this.grid[r][c] && newRow[c] &&
-          (this.grid[r][c].col !== newRow[c].col || this.grid[r][c].value !== newRow[c].value))
-        {
+          (this.grid[r][c].col !== newRow[c].col || this.grid[r][c].value !== newRow[c].value)) {
           moved = true;
         }
       }
@@ -444,8 +413,7 @@ class Game2048
   }
 
 
-  updateDisplay()
-  {
+  updateDisplay() {
     // TODO set score on UI
 
     // TODOif score > best 
@@ -455,14 +423,10 @@ class Game2048
   }
 
 
-  hasWon()
-  {
-    for (let r = 0; r < BOARD_SIZE; r++)
-    {
-      for (let c = 0; c < BOARD_SIZE; c++)
-      {
-        if (this.grid[r][c] && this.grid[r][c].value === 2048)
-        {
+  hasWon() {
+    for (let r = 0; r < BOARD_SIZE; r++) {
+      for (let c = 0; c < BOARD_SIZE; c++) {
+        if (this.grid[r][c] && this.grid[r][c].value === 2048) {
           return true;
         }
       }
@@ -471,31 +435,24 @@ class Game2048
   }
 
 
-  isGameOver()
-  {
+  isGameOver() {
     // Check for empty cells
-    for (let r = 0; r < BOARD_SIZE; r++)
-    {
-      for (let c = 0; c < BOARD_SIZE; c++)
-      {
-        if (this.grid[r][c] === null)
-        {
+    for (let r = 0; r < BOARD_SIZE; r++) {
+      for (let c = 0; c < BOARD_SIZE; c++) {
+        if (this.grid[r][c] === null) {
           return false;
         }
       }
     }
 
     // Check for possible merges
-    for (let r = 0; r < BOARD_SIZE; r++)
-    {
-      for (let c = 0; c < BOARD_SIZE; c++)
-      {
+    for (let r = 0; r < BOARD_SIZE; r++) {
+      for (let c = 0; c < BOARD_SIZE; c++) {
         const currentValue = this.grid[r][c].value;
         if (
           (r < (BOARD_SIZE - 1) && this.grid[r + 1][c] && this.grid[r + 1][c].value === currentValue) ||
           (c < (BOARD_SIZE - 1) && this.grid[r][c + 1] && this.grid[r][c + 1].value === currentValue)
-        )
-        {
+        ) {
           return false;
         }
       }
@@ -503,34 +460,66 @@ class Game2048
 
     return true;
   }
+
+  animateTiles() 
+  {
+    // todo
+    this.tiles.forEach(tile => 
+      {
+        const tileElement = document.querySelector(`#tile-${tile.id}`);
+        if (tileElement) {
+          // in ms
+          const animationDuration = 200;
+          const leftInitial = parseFloat(tileElement.style.left);
+          const topInitial = parseFloat(tileElement.style.top);
+          const { left, top } = this.getTileElementPosition(tile);
+
+          const offsetMult = 0.05;
+
+          tileElement.animate(
+            {
+              left: [`${leftInitial}px`, `${left + (left - leftInitial) * offsetMult}px`, `${left}px`],
+              top: [`${topInitial}px`, `${top + (top - topInitial) * offsetMult}px`, `${top}px`],
+              offset: [0, 0.8, 1]
+            },
+            {
+              duration: animationDuration,
+              fill: "forwards",
+              easing: "ease-out"
+            });
+
+          if(tile.merged)
+          {
+            console.log("enter merge");
+            tileElement.textContent = tile.value;
+            tileElement.className = `tile tile-${tile.value} tile-merged`;
+            // in sec
+            const mergeAnimationTime = parseFloat(getComputedStyle(tileElement).getPropertyValue('--ANIMATION-TIME-MERGE')); 
+
+            setTimeout(() => 
+              {
+                  tile.merged = false;
+                  tileElement.classList.remove('tile-merged');
+              }, mergeAnimationTime * 1000);
+          }
+        }
+      }
+    );
+
+     this.updateDisplay();
+  }
+
+  showGameWon() {
+
+  }
+
+
+  showGameOver() {
+
+  }
+
+
 }
 
-
-// animateTiles()
-// {
-//   // todo
-//   this.tiles.forEach(tile =>
-//   {
-//     const tileElement = document.querySelector(`#tile-${tile.id}`);
-//     if (tileElement)
-//     {
-//       // tileElement.style.left =
-//     }
-//   }
-//   )
-// }
-
-showGameWon()
-{
-
-}
-
-
-showGameOver()
-{
-
-}
-
-
-let BOARD_SIZE = 5;
+let BOARD_SIZE = 4;
 const game = new Game2048(BOARD_SIZE);

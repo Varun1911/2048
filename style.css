@@ -104,8 +104,8 @@ main
 
 .tile-merged 
 {
-    --ANIMATION-TIME-MOVE : 0.2s;
-    animation: pop var(--ANIMATION-TIME-MOVE) ease-in-out;
+    --ANIMATION-TIME-MERGE : 0.2s;
+    animation: pop var(--ANIMATION-TIME-MERGE) ease-in-out;
 }
 
 
