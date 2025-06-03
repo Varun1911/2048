@@ -6,7 +6,7 @@ class Game2048
     this.BOARD_SIZE = BOARD_SIZE;
     this.grid = [];
     this.score = 0;
-    this.best = parseInt(localStorage.getItem('best2048') || '0');
+    this.best = parseInt(localStorage.getItem(`best2048_${this.BOARD_SIZE}`) || '0');
     this.gameWon = false;
     this.gameOver = false;
     this.tileId = 0;
@@ -93,10 +93,14 @@ class Game2048
         'ArrowRight': 'right',
         'ArrowUp': 'up',
         'ArrowDown': 'down',
-        'KeyA': 'left',
-        'KeyD': 'right',
-        'KeyW': 'up',
-        'KeyS': 'down',
+        'A': 'left',
+        'D': 'right',
+        'W': 'up',
+        'S': 'down',
+        'a': 'left',
+        'd': 'right',
+        'w': 'up',
+        's': 'down',
       }
 
       const direction = keyMap[e.key];
@@ -122,7 +126,7 @@ class Game2048
       {
         if (this.grid[r][c] === null)
         {
-          emptyCells.push({r, c});
+          emptyCells.push({ r, c });
         }
       }
     }
@@ -177,7 +181,7 @@ class Game2048
       tileElement.classList.add('tile-new');
     }
 
-    const {left, top} = this.getTileElementPosition(tile);
+    const { left, top } = this.getTileElementPosition(tile);
     tileElement.style.left = left + 'px';
     tileElement.style.top = top + 'px';
     tileElement.textContent = tile.value;
@@ -208,7 +212,7 @@ class Game2048
     const left = tile.col * (tileSize + padding * 2) + padding * 2;
     const top = tile.row * (tileSize + padding * 2) + padding * 2;
 
-    return {left, top};
+    return { left, top };
   }
 
 
@@ -270,7 +274,7 @@ class Game2048
 
     for (let r = 0; r < this.BOARD_SIZE; r++)
     {
-      let row = this.grid[r].filter(item => item !== null);
+      const row = this.grid[r].filter(item => item !== null);
       let newRow = Array(this.BOARD_SIZE).fill(null);
       let col = 0;
 
@@ -283,7 +287,7 @@ class Game2048
         {
 
           // merge tiles
-          const cell = {r: r, c: col};
+          const cell = { r: r, c: col };
           const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
 
           newRow[col] = mergedTile;
@@ -291,12 +295,13 @@ class Game2048
           this.score += mergedTile.value;
 
           // remove the merged tile 
-          const mergedTileElement = document.querySelector(`#tile-${row[i + 1].id}`);
+          const mergedTileId = row[i + 1].id;
+          const mergedTileElement = document.querySelector(`#tile-${mergedTileId}`);
           if (mergedTileElement)
           {
             mergedTileElement.remove();
           }
-          this.tiles.delete(row[i + 1].id);
+          this.tiles.delete(mergedTileId);
 
           // skip the next tile as it is merged
           i++;
@@ -341,7 +346,7 @@ class Game2048
 
     for (let r = 0; r < this.BOARD_SIZE; r++)
     {
-      const row = this.grid[r].filter(tile => tile != null);
+      const row = this.grid[r].filter(tile => tile !== null);
       let newRow = Array(this.BOARD_SIZE).fill(null);
       let col = this.BOARD_SIZE - 1;
 
@@ -353,7 +358,7 @@ class Game2048
         if (i > 0 && tile.value === row[i - 1].value)
         {
           // merge tiles
-          const cell = {r: r, col: col};
+          const cell = { r: r, c: col };
           const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
 
           newRow[col] = mergedTile;
@@ -401,11 +406,163 @@ class Game2048
     return moved;
   }
 
+
+  moveUp()
+  {
+    let moved = false;
+
+    for (let c = 0; c < this.BOARD_SIZE; c++)
+    {
+      const col = this.grid.map((row) => row[c]).filter(item => item !== null);
+      let newCol = Array(this.BOARD_SIZE).fill(null);
+      let row = 0;
+
+      for (let i = 0; i < col.length; i++)
+      {
+        const tile = col[i];
+
+        // check merge
+        if (i < col.length - 1 && col[i + 1].value === tile.value)
+        {
+          // merge tiles
+          const cell = { r: row, c: c };
+          const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
+
+          newCol[row] = mergedTile;
+          this.tiles.set(tile.id, mergedTile);
+          this.score += mergedTile.value;
+
+          // delete merged tile
+          const mergedTileId = col[i + 1].id;
+          const mergedTileElement = document.querySelector(`#tile-${mergedTileId}`);
+
+          if (mergedTileElement)
+          {
+            mergedTileElement.remove();
+          }
+
+          this.tiles.delete(mergedTileId);
+
+          // skip the next tile as it is merged
+          i++;
+        }
+
+        else
+        {
+          tile.row = row;
+          tile.col = c;
+          tile.merged = false;
+          newCol[row] = tile;
+          this.tiles.set(tile.id, tile);
+        }
+
+        row++;
+      }
+
+      // check if anything moved
+      for (let r = 0; r < this.BOARD_SIZE; r++)
+      {
+        if (this.grid[r][c] !== newCol[r])
+        {
+          moved = true;
+          break;
+        }
+      }
+
+
+      // update the column values in grid
+      newCol.forEach((val, idx) =>
+      {
+        this.grid[idx][c] = val;
+      })
+
+    }
+
+    return moved;
+  }
+
+
+  moveDown()
+  {
+    let moved = false;
+
+    for (let c = 0; c < this.BOARD_SIZE; c++)
+    {
+      const col = this.grid.map((row) => row[c]).filter(item => item !== null);
+      let newCol = Array(this.BOARD_SIZE).fill(null);
+      let row = this.BOARD_SIZE - 1;
+
+      for (let i = col.length - 1; i >= 0; i--)
+      {
+        const tile = col[i];
+
+        // check merge
+        if (i > 0 && col[i - 1].value === tile.value)
+        {
+          // merge tiles
+          const cell = { r: row, c: c };
+          const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
+
+          newCol[row] = mergedTile;
+          this.tiles.set(tile.id, mergedTile);
+          this.score += mergedTile.value;
+
+          // delete merged tile
+          const mergedTileId = col[i - 1].id;
+          const mergedTileElement = document.querySelector(`#tile-${mergedTileId}`);
+
+          if (mergedTileElement)
+          {
+            mergedTileElement.remove();
+          }
+
+          this.tiles.delete(mergedTileId);
+
+          // skip the next tile as it is merged
+          i--;
+        }
+
+        else
+        {
+          tile.row = row;
+          tile.col = c;
+          tile.merged = false;
+          newCol[row] = tile;
+          this.tiles.set(tile.id, tile);
+        }
+
+        row--;
+      }
+
+      // check if anything moved
+      for (let r = 0; r < this.BOARD_SIZE; r++)
+      {
+        if (this.grid[r][c] !== newCol[r])
+        {
+          moved = true;
+          break;
+        }
+      }
+
+
+      // update the column values in grid
+      newCol.forEach((val, idx) =>
+      {
+        this.grid[idx][c] = val;
+      })
+
+    }
+
+    return moved;
+  }
+
+
+
   updateDisplay()
   {
     // TODO set score on UI
 
-    // TODOif score > best 
+    // TODO if score > best 
     // TODO update best variable and in local storage 
 
     // TODO update best UI
@@ -414,9 +571,9 @@ class Game2048
 
   hasWon()
   {
-    for (let r = 0; r < BOARD_SIZE; r++)
+    for (let r = 0; r < this.BOARD_SIZE; r++)
     {
-      for (let c = 0; c < BOARD_SIZE; c++)
+      for (let c = 0; c < this.BOARD_SIZE; c++)
       {
         if (this.grid[r][c] && this.grid[r][c].value === 2048)
         {
@@ -431,9 +588,9 @@ class Game2048
   isGameOver()
   {
     // Check for empty cells
-    for (let r = 0; r < BOARD_SIZE; r++)
+    for (let r = 0; r < this.BOARD_SIZE; r++)
     {
-      for (let c = 0; c < BOARD_SIZE; c++)
+      for (let c = 0; c < this.BOARD_SIZE; c++)
       {
         if (this.grid[r][c] === null)
         {
@@ -443,14 +600,14 @@ class Game2048
     }
 
     // Check for possible merges
-    for (let r = 0; r < BOARD_SIZE; r++)
+    for (let r = 0; r < this.BOARD_SIZE; r++)
     {
-      for (let c = 0; c < BOARD_SIZE; c++)
+      for (let c = 0; c < this.BOARD_SIZE; c++)
       {
         const currentValue = this.grid[r][c].value;
         if (
-          (r < (BOARD_SIZE - 1) && this.grid[r + 1][c] && this.grid[r + 1][c].value === currentValue) ||
-          (c < (BOARD_SIZE - 1) && this.grid[r][c + 1] && this.grid[r][c + 1].value === currentValue)
+          (r < (this.BOARD_SIZE - 1) && this.grid[r + 1][c] && this.grid[r + 1][c].value === currentValue) ||
+          (c < (this.BOARD_SIZE - 1) && this.grid[r][c + 1] && this.grid[r][c + 1].value === currentValue)
         )
         {
           return false;
@@ -472,10 +629,10 @@ class Game2048
         // in ms
         const animationDuration = 200;
 
-        // calculte the position
+        // calculate the position
         const leftInitial = parseFloat(tileElement.style.left);
         const topInitial = parseFloat(tileElement.style.top);
-        const {left, top} = this.getTileElementPosition(tile);
+        const { left, top } = this.getTileElementPosition(tile);
 
         const offsetMult = 0.05;
 
