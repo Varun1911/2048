@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 /* RESET */
-*
-{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -17,18 +16,17 @@
     --BGCOLOR: rgb(250 248 240);
     --BGCOLOR-BOARD: rgb(156, 136, 121);
     --BGCOLOR-TILE: rgb(189, 172, 151);
-    --COLOR-P : #756452;
+    --COLOR-P: #756452;
 
     /* MISC */
     --PADDING-BOARD: 5px;
     --TILE-SIZE: 90px;
     --TILE-BORDER-RADIUS: 10px;
-    --BOARD-SIZE : 410px;
+    --BOARD-SIZE: 250px;
 }
 
 
-body
-{
+body {
     min-height: 100dvh;
     background-color: var(--BGCOLOR);
     display: flex;
@@ -37,22 +35,20 @@ body
 }
 
 
-.header__h1{
+.header__h1 {
     font-size: 3rem;
     color: var(--COLOR-P);
 }
 
 
-main
-{
+main {
     flex: 1 1 0;
     display: grid;
     place-content: center;
 }
 
 
-.board
-{
+.board {
     background-color: var(--BGCOLOR-BOARD);
     border-radius: 15px;
     display: grid;
@@ -69,17 +65,16 @@ main
 }
 
 
-.tile-container
-{
+.tile-container {
     background-color: var(--BGCOLOR-TILE);
     height: var(--TILE-SIZE);
     width: var(--TILE-SIZE);
     border-radius: var(--TILE-BORDER-RADIUS);
     box-shadow: inset 0 0 5px -3px rgba(0, 0, 0, 0.5);
 }
- 
 
-.tile{
+
+.tile {
     position: absolute;
     width: var(--TILE-SIZE);
     height: var(--TILE-SIZE);
@@ -96,15 +91,13 @@ main
 }
 
 
-.tile-new
-{
+.tile-new {
     --ANIMATION-TIME-SPAWN: 0.2s;
     animation: appear var(--ANIMATION-TIME-SPAWN) ease-in-out;
 }
 
-.tile-merged 
-{
-    --ANIMATION-TIME-MERGE : 0.2s;
+.tile-merged {
+    --ANIMATION-TIME-MERGE: 0.2s;
     animation: pop var(--ANIMATION-TIME-MERGE) ease-in-out;
 }
 
@@ -116,7 +109,7 @@ main
     }
 
 
-    80%{
+    80% {
         opacity: 0.9;
         transform: scale(1.2);
     }
@@ -143,76 +136,105 @@ main
 }
 
 
-.tile-2{
+.tile-2 {
     background-color: #ede4da;
     color: #756452;
 }
 
-.tile-4{
+.tile-4 {
     background-color: #ebd7b5;
     color: #756452;
 }
 
-.tile-8{
+.tile-8 {
     background-color: #f2b177;
-    color: #fff ;
+    color: #fff;
 }
 
 
-.tile-16{
+.tile-16 {
     background-color: #f69461;
-    color: #fff ;
+    color: #fff;
 }
 
-.tile-32{
+.tile-32 {
     background-color: #f67f63;
-    color: #fff ;
+    color: #fff;
 }
 
 
-.tile-64{
+.tile-64 {
     background-color: #f76442;
-    color: #fff ;
+    color: #fff;
 }
 
 
-.tile-128{
+.tile-128 {
     background-color: hsl(46, 83%, 68%);
-    color: #fff ;
+    color: #fff;
     font-size: 1.8em;
 }
 
-.tile-256{
+.tile-256 {
     background-color: hsl(47, 84%, 68%);
-    color: #fff ;    
+    color: #fff;
     font-size: 1.8em;
 }
 
 
-.tile-512{
+.tile-512 {
     background-color: hsl(47, 90%, 68%);
-    color: #fff ;  
+    color: #fff;
     font-size: 1.8em;
 }
 
 
-.tile-1024{
+.tile-1024 {
     background-color: hsl(47, 92%, 68%);
-    color: #fff ;  
+    color: #fff;
     font-size: 1.6em;
 }
 
 
-.tile-2048{
+.tile-2048 {
     background-color: hsl(48, 95%, 68%);
-    color: #fff ;  
+    color: #fff;
     font-size: 1.6em;
-    box-shadow: 0 0 20px rgba(237, 194, 46, 0.5);   
+    box-shadow: 0 0 20px rgba(237, 194, 46, 0.5);
 }
 
 
-.tile-4096{
+.tile-4096 {
     background-color: hsl(12, 96%, 64%);
-    color: #fff ;  
+    color: #fff;
     font-size: 1.6em;
+}
+
+
+@media screen and (min-width: 640px) {
+    :root {
+        --BOARD-SIZE: 300px;
+    }
+}
+
+
+@media screen and (min-width: 768px) {
+    :root {
+        --BOARD-SIZE: 350px;
+    }
+}
+
+
+@media screen and (min-width: 1024px) {
+    :root {
+        --BOARD-SIZE: 410px;
+    }
+}
+
+
+
+@media screen and (min-width: 1280px) {
+    :root {
+        --BOARD-SIZE: 450px;
+    }
 }

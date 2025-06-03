@@ -11,13 +11,49 @@ class Game2048
     this.gameOver = false;
     this.tileId = 0;
     this.tiles = new Map(); // Track tiles for animation
+    this.allowInput = true;
 
     this.createBoardUI(BOARD_SIZE)
     this.init(BOARD_SIZE);
     this.setupEventListeners();
   }
 
+  // Helper functions
+  getRandomNumber()
+  {
+    return Math.random() < 0.9 ? 2 : 4;
+  }
 
+
+  createTile(tileId, cell, value, isNew, merged = false)
+  {
+    const tile = {
+      id: tileId,
+      value: value,
+      row: cell.r,
+      col: cell.c,
+      isNew: isNew,
+      merged: merged
+    };
+
+    return tile;
+  }
+
+
+  getTileElementPosition(tile)
+  {
+    const root = document.documentElement;
+    const padding = parseFloat(getComputedStyle(root).getPropertyValue('--PADDING-BOARD'));
+    const tileSize = parseFloat(getComputedStyle(root).getPropertyValue('--TILE-SIZE'));
+
+    const left = tile.col * (tileSize + padding * 2) + padding * 2;
+    const top = tile.row * (tileSize + padding * 2) + padding * 2;
+
+    return { left, top };
+  }
+
+
+  // Main functions
   createBoardUI(size)
   {
     const board = document.querySelector('.board');
@@ -115,7 +151,6 @@ class Game2048
   }
 
 
-
   addNewTile()
   {
     let emptyCells = [];
@@ -145,26 +180,6 @@ class Game2048
     }
 
     return null;
-  }
-
-
-  getRandomNumber()
-  {
-    return Math.random() < 0.9 ? 2 : 4;
-  }
-
-  createTile(tileId, cell, value, isNew, merged = false)
-  {
-    const tile = {
-      id: tileId,
-      value: value,
-      row: cell.r,
-      col: cell.c,
-      isNew: isNew,
-      merged: merged
-    };
-
-    return tile;
   }
 
 
@@ -203,21 +218,13 @@ class Game2048
   }
 
 
-  getTileElementPosition(tile)
-  {
-    const root = document.documentElement;
-    const padding = parseFloat(getComputedStyle(root).getPropertyValue('--PADDING-BOARD'));
-    const tileSize = parseFloat(getComputedStyle(root).getPropertyValue('--TILE-SIZE'));
-
-    const left = tile.col * (tileSize + padding * 2) + padding * 2;
-    const top = tile.row * (tileSize + padding * 2) + padding * 2;
-
-    return { left, top };
-  }
-
-
   move(direction)
   {
+    if (!this.allowInput)
+    {
+      return;
+    }
+
     let moved = false;
 
     switch (direction)
@@ -240,6 +247,9 @@ class Game2048
 
     if (moved)
     {
+      //disallow input during animation
+      this.allowInput = false;
+
       // animate to new positions
       this.animateTiles();
 
@@ -249,6 +259,8 @@ class Game2048
       // check game state and add tile
       setTimeout(() =>
       {
+        this.allowInput = true;
+
         this.addNewTile();
 
         if (!this.gameWon && this.hasWon())
@@ -557,7 +569,6 @@ class Game2048
   }
 
 
-
   updateDisplay()
   {
     // TODO set score on UI
@@ -689,7 +700,6 @@ class Game2048
   {
 
   }
-
 
 }
 
