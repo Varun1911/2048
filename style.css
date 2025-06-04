@@ -88,6 +88,7 @@ main {
     font-weight: bold;
 
     transform-origin: center;
+    z-index: 1;
 }
 
 

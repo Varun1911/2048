@@ -12,6 +12,10 @@ class Game2048
     this.tileId = 0;
     this.tiles = new Map(); // Track tiles for animation
     this.allowInput = true;
+    // in ms
+    this.animationTimeMove = 200;
+    // Store tiles that need to be animated and then removed
+    this.tilesToRemove = [];
 
     this.createBoardUI(BOARD_SIZE)
     this.init(BOARD_SIZE);
@@ -103,6 +107,7 @@ class Game2048
     this.gameOver = false;
     this.tileId = 0;
     this.tiles.clear();
+    this.tilesToRemove = [];
 
     //remove existing tiles
     const board = document.querySelector('.board');
@@ -226,6 +231,8 @@ class Game2048
     }
 
     let moved = false;
+    // Clear previous tiles to remove
+    this.tilesToRemove = [];
 
     switch (direction)
     {
@@ -253,13 +260,13 @@ class Game2048
       // animate to new positions
       this.animateTiles();
 
-      // move animation time in sec
-      const animationTimeMove = 0.15;
-
       // check game state and add tile
       setTimeout(() =>
       {
         this.allowInput = true;
+
+        // Remove tiles that were marked for removal after animation
+        this.cleanupRemovedTiles();
 
         this.addNewTile();
 
@@ -274,9 +281,24 @@ class Game2048
           this.gameOver = true;
           this.showGameOver();
         }
-      }, animationTimeMove * 1000);
+      }, this.animationTimeMove);
     }
 
+  }
+
+  // New method to clean up tiles after animation
+  cleanupRemovedTiles()
+  {
+    this.tilesToRemove.forEach(tileId =>
+    {
+      const tileElement = document.querySelector(`#tile-${tileId}`);
+      if (tileElement)
+      {
+        tileElement.remove();
+      }
+      this.tiles.delete(tileId);
+    });
+    this.tilesToRemove = [];
   }
 
 
@@ -306,14 +328,26 @@ class Game2048
           this.tiles.set(tile.id, mergedTile);
           this.score += mergedTile.value;
 
-          // remove the merged tile 
+          // Mark the merged tile for removal AFTER animation
           const mergedTileId = row[i + 1].id;
+          this.tilesToRemove.push(mergedTileId);
+
+          // Update the merged tile's position for animation
+          const mergedTileToAnimate = this.tiles.get(mergedTileId);
+          if (mergedTileToAnimate)
+          {
+            mergedTileToAnimate.row = r;
+            mergedTileToAnimate.col = col;
+          }
+
+          // move the z-index back
           const mergedTileElement = document.querySelector(`#tile-${mergedTileId}`);
+
           if (mergedTileElement)
           {
-            mergedTileElement.remove();
+            // initially it is 1
+            mergedTileElement.style.zIndex = 0;
           }
-          this.tiles.delete(mergedTileId);
 
           // skip the next tile as it is merged
           i++;
@@ -377,14 +411,26 @@ class Game2048
           this.tiles.set(tile.id, mergedTile);
           this.score += mergedTile.value;
 
-          // delete merged tile
-          const mergedTileElement = document.querySelector(`#tile-${row[i - 1].id}`);
-          if (mergedTileElement)
+          // Mark the merged tile for removal AFTER animation
+          const mergedTileId = row[i - 1].id;
+          this.tilesToRemove.push(mergedTileId);
+
+          // Update the merged tile's position for animation
+          const mergedTileToAnimate = this.tiles.get(mergedTileId);
+          if (mergedTileToAnimate)
           {
-            mergedTileElement.remove();
+            mergedTileToAnimate.row = r;
+            mergedTileToAnimate.col = col;
           }
 
-          this.tiles.delete(row[i - 1].id);
+          // move the z-index back
+          const mergedTileElement = document.querySelector(`#tile-${mergedTileId}`);
+
+          if (mergedTileElement)
+          {
+            // initially it is 1
+            mergedTileElement.style.zIndex = 0;
+          }
 
           // skip the next element
           i--;
@@ -444,16 +490,26 @@ class Game2048
           this.tiles.set(tile.id, mergedTile);
           this.score += mergedTile.value;
 
-          // delete merged tile
+          // Mark the merged tile for removal AFTER animation
           const mergedTileId = col[i + 1].id;
+          this.tilesToRemove.push(mergedTileId);
+
+          // Update the merged tile's position for animation
+          const mergedTileToAnimate = this.tiles.get(mergedTileId);
+          if (mergedTileToAnimate)
+          {
+            mergedTileToAnimate.row = row;
+            mergedTileToAnimate.col = c;
+          }
+
+          // move the z-index back
           const mergedTileElement = document.querySelector(`#tile-${mergedTileId}`);
 
           if (mergedTileElement)
           {
-            mergedTileElement.remove();
+            // initially it is 1
+            mergedTileElement.style.zIndex = 0;
           }
-
-          this.tiles.delete(mergedTileId);
 
           // skip the next tile as it is merged
           i++;
@@ -519,16 +575,27 @@ class Game2048
           this.tiles.set(tile.id, mergedTile);
           this.score += mergedTile.value;
 
-          // delete merged tile
+          // Mark the merged tile for removal AFTER animation
           const mergedTileId = col[i - 1].id;
+          this.tilesToRemove.push(mergedTileId);
+
+          // Update the merged tile's position for animation
+          const mergedTileToAnimate = this.tiles.get(mergedTileId);
+          if (mergedTileToAnimate)
+          {
+            mergedTileToAnimate.row = row;
+            mergedTileToAnimate.col = c;
+          }
+
+
+          // move the z-index back
           const mergedTileElement = document.querySelector(`#tile-${mergedTileId}`);
 
           if (mergedTileElement)
           {
-            mergedTileElement.remove();
+            // initially it is 1
+            mergedTileElement.style.zIndex = 0;
           }
-
-          this.tiles.delete(mergedTileId);
 
           // skip the next tile as it is merged
           i--;
@@ -637,8 +704,6 @@ class Game2048
       const tileElement = document.querySelector(`#tile-${tile.id}`);
       if (tileElement)
       {
-        // in ms
-        const animationDuration = 200;
 
         // calculate the position
         const leftInitial = parseFloat(tileElement.style.left);
@@ -655,7 +720,7 @@ class Game2048
             offset: [0, 0.8, 1]
           },
           {
-            duration: animationDuration,
+            duration: this.animationTimeMove,
             fill: "forwards",
             easing: "ease-out"
           });
@@ -671,7 +736,6 @@ class Game2048
         // add merge class to merged tiles
         if (tile.merged)
         {
-          console.log("enter merge");
           tileElement.textContent = tile.value;
           tileElement.className = `tile tile-${tile.value} tile-merged`;
           // in sec
