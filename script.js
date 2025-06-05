@@ -20,6 +20,7 @@ class Game2048
     this.createBoardUI(BOARD_SIZE)
     this.init(BOARD_SIZE);
     this.setupEventListeners();
+    this.setupTouchInput();
   }
 
   // Helper functions
@@ -117,7 +118,8 @@ class Game2048
       if (this.gameOver && !this.gameWon)
         return;
 
-      const keyMap = {
+      const keyMap =
+      {
         'ArrowLeft': 'left',
         'ArrowRight': 'right',
         'ArrowUp': 'up',
@@ -141,6 +143,77 @@ class Game2048
       }
 
     })
+  }
+
+
+  setupTouchInput()
+  {
+    let startX, startY, endX, endY;
+
+    // Touch start
+    document.body.addEventListener('touchstart', (e) =>
+    {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
+
+    // Touch end
+    document.body.addEventListener('touchend', (e) =>
+    {
+      endX = e.changedTouches[0].clientX;
+      endY = e.changedTouches[0].clientY;
+      handleSwipe.call(this);
+    });
+
+
+    function handleSwipe()
+    {
+
+      if (this.gameOver && !this.gameWon)
+        return;
+
+      let direction;
+
+      const deltaX = endX - startX;
+      const deltaY = endY - startY;
+      const minSwipeDistance = 50;
+
+      if (Math.abs(deltaX) > Math.abs(deltaY))
+      {
+        // Horizontal swipe
+        if (Math.abs(deltaX) > minSwipeDistance)
+        {
+          if (deltaX > 0)
+          {
+            direction = 'right';
+          }
+          else
+          {
+            direction = 'left';
+          }
+        }
+      }
+      else
+      {
+        // Vertical swipe
+        if (Math.abs(deltaY) > minSwipeDistance)
+        {
+          if (deltaY > 0)
+          {
+            direction = 'down';
+          }
+          else
+          {
+            direction = 'up';
+          }
+        }
+      }
+
+      if (direction)
+      {
+        this.move(direction);
+      }
+    }
   }
 
 
@@ -757,3 +830,10 @@ class Game2048
 
 let BOARD_SIZE = 4;
 const game = new Game2048(BOARD_SIZE);
+const newGameBtn = document.querySelector('.new-game-btn');
+
+newGameBtn.addEventListener('click', (e) =>
+{
+  game.init(BOARD_SIZE);
+});
+

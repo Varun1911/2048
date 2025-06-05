@@ -201,7 +201,6 @@ main {
     background-color: hsl(48, 95%, 68%);
     color: #fff;
     font-size: var(--FS-S);
-    box-shadow: 0 0 20px rgba(237, 194, 46, 0.5);
 }
 
 
