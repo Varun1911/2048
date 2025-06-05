@@ -11,6 +11,8 @@
 :root {
     /* FONTS */
     --FF: "Rubik", sans-serif;
+    --FS-P: clamp(1.35rem, 2vw + 0.5rem, 3rem);
+    --FS-S: clamp(1.2rem, 1.8vw + 0.5rem, 2.8rem);
 
     /* COLORS */
     --BGCOLOR: rgb(250 248 240);
@@ -19,10 +21,10 @@
     --COLOR-P: #756452;
 
     /* MISC */
-    --PADDING-BOARD: 5px;
-    --TILE-SIZE: 90px;
-    --TILE-BORDER-RADIUS: 10px;
-    --BOARD-SIZE: 250px;
+    --TILE-SIZE: clamp(3.5rem, 8dvw, 6rem);
+    --PADDING-BOARD: calc(var(--TILE-SIZE) / 18);
+    --BOARD-BORDER-RADIUS : clamp(0.5rem, 1.5dvw, 1.5rem);
+    --TILE-BORDER-RADIUS: clamp(0.25rem, 0.8dvw, 1rem);
 }
 
 
@@ -50,18 +52,16 @@ main {
 
 .board {
     background-color: var(--BGCOLOR-BOARD);
-    border-radius: 15px;
+    border-radius: var(--BOARD-BORDER-RADIUS);
     display: grid;
     /* grid-template-columns: repeat(4, calc(var(--TILE-SIZE) + 10px));
     grid-template-rows: repeat(4, calc(var(--TILE-SIZE) + 10px)); */
     align-items: center;
     justify-items: center;
     padding: var(--PADDING-BOARD);
-    box-shadow: 0 0 15px -5px black;
+    box-shadow: 0 0 1.8dvw -0.7dvw black;
 
     position: relative;
-    height: var(--BOARD-SIZE);
-    width: var(--BOARD-SIZE);
 }
 
 
@@ -70,7 +70,7 @@ main {
     height: var(--TILE-SIZE);
     width: var(--TILE-SIZE);
     border-radius: var(--TILE-BORDER-RADIUS);
-    box-shadow: inset 0 0 5px -3px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 0.5dvw -0.2dvw rgba(0, 0, 0, 0.5);
 }
 
 
@@ -84,7 +84,7 @@ main {
     justify-content: center;
     align-items: center;
 
-    font-size: 2em;
+    font-size: var(--FS-P);
     font-weight: bold;
 
     transform-origin: center;
@@ -173,34 +173,34 @@ main {
 .tile-128 {
     background-color: hsl(46, 83%, 68%);
     color: #fff;
-    font-size: 1.8em;
+    font-size: var(--FS-S);
 }
 
 .tile-256 {
     background-color: hsl(47, 84%, 68%);
     color: #fff;
-    font-size: 1.8em;
+    font-size: var(--FS-S);
 }
 
 
 .tile-512 {
     background-color: hsl(47, 90%, 68%);
     color: #fff;
-    font-size: 1.8em;
+    font-size: var(--FS-S);
 }
 
 
 .tile-1024 {
     background-color: hsl(47, 92%, 68%);
     color: #fff;
-    font-size: 1.6em;
+    font-size: var(--FS-S);
 }
 
 
 .tile-2048 {
     background-color: hsl(48, 95%, 68%);
     color: #fff;
-    font-size: 1.6em;
+    font-size: var(--FS-S);
     box-shadow: 0 0 20px rgba(237, 194, 46, 0.5);
 }
 
@@ -208,34 +208,26 @@ main {
 .tile-4096 {
     background-color: hsl(12, 96%, 64%);
     color: #fff;
-    font-size: 1.6em;
+    font-size: var(--FS-S);
 }
 
 
 @media screen and (min-width: 640px) {
-    :root {
-        --BOARD-SIZE: 300px;
-    }
+   
 }
 
 
 @media screen and (min-width: 768px) {
-    :root {
-        --BOARD-SIZE: 350px;
-    }
+  
 }
 
 
 @media screen and (min-width: 1024px) {
-    :root {
-        --BOARD-SIZE: 410px;
-    }
+    
 }
 
 
 
 @media screen and (min-width: 1280px) {
-    :root {
-        --BOARD-SIZE: 450px;
-    }
+ 
 }

@@ -46,12 +46,16 @@ class Game2048
 
   getTileElementPosition(tile)
   {
-    const root = document.documentElement;
-    const padding = parseFloat(getComputedStyle(root).getPropertyValue('--PADDING-BOARD'));
-    const tileSize = parseFloat(getComputedStyle(root).getPropertyValue('--TILE-SIZE'));
+    // const root = document.documentElement;
+    const board = document.querySelector('.board');
+    const padding = parseFloat(getComputedStyle(board).padding);
 
-    const left = tile.col * (tileSize + padding * 2) + padding * 2;
-    const top = tile.row * (tileSize + padding * 2) + padding * 2;
+    const tileContainer = document.querySelector('.tile-container');
+    const tileSize = tileContainer.getBoundingClientRect().width;
+    const boardSize = board.getBoundingClientRect().width;
+
+    const left = (tile.col * (tileSize + padding * 2) + padding * 2) / boardSize * 100;
+    const top = (tile.row * (tileSize + padding * 2) + padding * 2) / boardSize * 100;
 
     return { left, top };
   }
@@ -63,22 +67,6 @@ class Game2048
     const board = document.querySelector('.board');
 
     // * Dynamic board size ==
-
-    const root = document.documentElement;
-
-    //410 x 410 px board (fixed)
-    const rootStyles = getComputedStyle(root);
-    let boardSize = parseInt(rootStyles.getPropertyValue('--BOARD-SIZE'));
-
-    //combined tile length is 87% of board length
-    let tileSize = (boardSize * 0.87) / size;
-
-    root.style.setProperty('--TILE-SIZE', `${tileSize}px`);
-
-    //remaining is padding, padding is on both sides of tile and on the board
-    let padding = (boardSize - tileSize * size) / (size * 2 + 2);
-    root.style.setProperty('--PADDING-BOARD', `${padding}px`);
-
 
     //grid templates
     board.style.gridTemplateColumns = `repeat(${size}, calc(var(--TILE-SIZE) + var(--PADDING-BOARD) * 2))`;
@@ -202,8 +190,8 @@ class Game2048
     }
 
     const { left, top } = this.getTileElementPosition(tile);
-    tileElement.style.left = left + 'px';
-    tileElement.style.top = top + 'px';
+    tileElement.style.left = left + '%';
+    tileElement.style.top = top + '%';
     tileElement.textContent = tile.value;
 
     board.appendChild(tileElement);
@@ -715,8 +703,8 @@ class Game2048
         //animate the element
         const animation = tileElement.animate(
           {
-            left: [`${leftInitial}px`, `${left + (left - leftInitial) * offsetMult}px`, `${left}px`],
-            top: [`${topInitial}px`, `${top + (top - topInitial) * offsetMult}px`, `${top}px`],
+            left: [`${leftInitial}%`, `${left + (left - leftInitial) * offsetMult}%`, `${left}%`],
+            top: [`${topInitial}%`, `${top + (top - topInitial) * offsetMult}%`, `${top}%`],
             offset: [0, 0.8, 1]
           },
           {
