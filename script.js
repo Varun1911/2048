@@ -150,6 +150,11 @@ class Game2048
   {
     let startX, startY, endX, endY;
 
+    document.addEventListener('touchmove', function (e)
+    {
+      e.preventDefault();
+    }, {passive: false});
+
     // Touch start
     document.body.addEventListener('touchstart', (e) =>
     {
