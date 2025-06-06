@@ -29,10 +29,12 @@ class Game2048
     return parseInt(localStorage.getItem(`best2048_${this.BOARD_SIZE}`) || '0')
   }
 
+
   setBestScoreInStorage()
   {
     localStorage.setItem(`best2048_${this.BOARD_SIZE}`, this.best);
   }
+
 
   getRandomNumber()
   {

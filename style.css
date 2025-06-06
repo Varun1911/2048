@@ -88,6 +88,7 @@ header
 
 .score-container
 {
+    width: 7rem;
     border-radius: 10px;
     color: var(--COLOR-P);
     padding: 0.3rem 1.2rem;
