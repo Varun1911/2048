@@ -6,7 +6,7 @@ class Game2048
     this.BOARD_SIZE = BOARD_SIZE;
     this.grid = [];
     this.score = 0;
-    this.best = parseInt(localStorage.getItem(`best2048_${this.BOARD_SIZE}`) || '0');
+    this.best = this.getBestScoreFromStorage();
     this.gameWon = false;
     this.gameOver = false;
     this.tileId = 0;
@@ -24,6 +24,16 @@ class Game2048
   }
 
   // Helper functions
+  getBestScoreFromStorage()
+  {
+    return parseInt(localStorage.getItem(`best2048_${this.BOARD_SIZE}`) || '0')
+  }
+
+  setBestScoreInStorage()
+  {
+    localStorage.setItem(`best2048_${this.BOARD_SIZE}`, this.best);
+  }
+
   getRandomNumber()
   {
     return Math.random() < 0.9 ? 2 : 4;
@@ -704,12 +714,19 @@ class Game2048
 
   updateDisplay()
   {
-    // TODO set score on UI
+    let currScoreElement = document.querySelector(`.current-score-container .score`);
+    currScoreElement.textContent = this.score;
 
-    // TODO if score > best 
-    // TODO update best variable and in local storage 
+
+    if (this.score > this.best)
+    {
+      this.best = this.score;
+      this.setBestScoreInStorage();
+    }
 
     // TODO update best UI
+    let bestScoreElement = document.querySelector(`.best-score-container .score`)
+    bestScoreElement.textContent = this.best;
   }
 
 
@@ -822,13 +839,13 @@ class Game2048
 
   showGameWon()
   {
-
+    alert("You Win");
   }
 
 
   showGameOver()
   {
-
+    alert("Game Over");
   }
 
 }

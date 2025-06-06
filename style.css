@@ -11,7 +11,7 @@
 :root {
     /* FONTS */
     --FF: "Rubik", sans-serif;
-    --FS-P: clamp(1.35rem, 2vw + 0.5rem, 3rem);
+    --FS-P: clamp(1.35rem, 2.5vw + 1.2rem, 3rem);
     --FS-S: clamp(1.2rem, 1.8vw + 0.5rem, 2.8rem);
 
     /* COLORS */
@@ -19,14 +19,19 @@
     --BGCOLOR-BOARD: rgb(156, 136, 121);
     --BGCOLOR-TILE: rgb(189, 172, 151);
     --COLOR-P: #756452;
+    --COLOR-S: #f5f5f5;
 
     /* MISC */
-    --TILE-SIZE: clamp(3.5rem, 8dvw, 6rem);
+    --TILE-SIZE: clamp(3.5rem, min(17dvw, 20dvh), 6rem);
     --PADDING-BOARD: calc(var(--TILE-SIZE) / 18);
     --BOARD-BORDER-RADIUS : clamp(0.5rem, 1.5dvw, 1.5rem);
     --TILE-BORDER-RADIUS: clamp(0.25rem, 0.8dvw, 1rem);
 }
 
+/* UTILS */
+.center{
+    text-align: center;
+}
 
 body {
     min-height: 100dvh;
@@ -37,11 +42,88 @@ body {
 }
 
 
+header
+{
+    padding: 1.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .header__h1 {
     font-size: 3rem;
     color: var(--COLOR-P);
 }
 
+
+
+.new-game-btn
+{
+    border : none;
+    background-color: var(--BGCOLOR-BOARD);
+    font: inherit;
+    font-size: 1rem;
+    color: var(--COLOR-S);
+    padding: 0 1rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+}
+
+
+.new-game-btn:hover
+{
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+
+.score-wrapper
+{
+    display: flex;
+    gap: 1rem;
+}
+
+
+.score-container
+{
+    width: 5.5rem;
+    border-radius: 10px;
+    color: var(--COLOR-P);
+    padding: 0.3rem 0.5rem;
+    text-transform: uppercase;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column wrap;
+}
+
+
+.current-score-container
+{
+    background-color: #eae7d9;
+}  
+
+
+.best-score-container
+{
+    background: transparent;
+    border: 2px solid #eae7d9;
+
+}
+
+
+.score-container .score
+{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.score-container .text
+{
+    font-size: 0.75rem;
+    font-weight: 500;
+}
 
 main {
     flex: 1 1 0;
@@ -216,8 +298,29 @@ main {
 }
 
 
-@media screen and (min-width: 768px) {
-  
+@media screen and (max-width: 768px) 
+{
+    header
+    {
+        flex-flow: column wrap;
+        align-items: stretch;
+        gap : 1rem;
+    }
+    .new-game-btn
+    {
+        display: none;
+        pointer-events: none;
+    }
+
+    .score-wrapper
+    {
+        flex : 1 1 0;
+    }
+    
+    .score-container
+    {
+        flex: 1 1 0;
+    }
 }
 
 
