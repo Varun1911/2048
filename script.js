@@ -191,7 +191,7 @@ class Game2048
 
       const deltaX = endX - startX;
       const deltaY = endY - startY;
-      const minSwipeDistance = 50;
+      const minSwipeDistance = 30;
 
       if (Math.abs(deltaX) > Math.abs(deltaY))
       {
