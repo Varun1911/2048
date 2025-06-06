@@ -11,8 +11,8 @@
 :root {
     /* FONTS */
     --FF: "Rubik", sans-serif;
-    --FS-P: clamp(1.35rem, 2.5vw + 1.2rem, 3rem);
-    --FS-S: clamp(1.2rem, 1.8vw + 0.5rem, 2.8rem);
+    --FS-P: clamp(1.5rem, 3vw + 0.8rem, 2.2rem);
+    --FS-S: clamp(1.3rem, 2.5vw + 0.8rem, 2rem);
 
     /* COLORS */
     --BGCOLOR: rgb(250 248 240);
@@ -26,6 +26,7 @@
     --PADDING-BOARD: calc(var(--TILE-SIZE) / 18);
     --BOARD-BORDER-RADIUS : clamp(0.5rem, 1.5dvw, 1.5rem);
     --TILE-BORDER-RADIUS: clamp(0.25rem, 0.8dvw, 1rem);
+    --ANIMATION-TIME-SPAWN: 0.2s;
 }
 
 /* UTILS */
@@ -63,6 +64,7 @@ header
     background-color: var(--BGCOLOR-BOARD);
     font: inherit;
     font-size: 1rem;
+    font-weight: 450;
     color: var(--COLOR-S);
     padding: 0 1rem;
     height: 2.5rem;
@@ -86,10 +88,9 @@ header
 
 .score-container
 {
-    width: 5.5rem;
     border-radius: 10px;
     color: var(--COLOR-P);
-    padding: 0.3rem 0.5rem;
+    padding: 0.3rem 1.2rem;
     text-transform: uppercase;
 
     display: flex;
@@ -115,7 +116,7 @@ header
 
 .score-container .score
 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
 }
 
@@ -167,7 +168,7 @@ main {
     align-items: center;
 
     font-size: var(--FS-P);
-    font-weight: bold;
+    font-weight: 600;
 
     transform-origin: center;
     z-index: 1;
@@ -175,7 +176,6 @@ main {
 
 
 .tile-new {
-    --ANIMATION-TIME-SPAWN: 0.2s;
     animation: appear var(--ANIMATION-TIME-SPAWN) ease-in-out;
 }
 

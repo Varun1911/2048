@@ -336,6 +336,8 @@ class Game2048
       // animate to new positions
       this.animateTiles();
 
+      const animationTimeSpawn = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ANIMATION-TIME-SPAWN')) * 1000;
+
       // check game state and add tile
       setTimeout(() =>
       {
@@ -349,14 +351,23 @@ class Game2048
         if (!this.gameWon && this.hasWon())
         {
           this.gameWon = true;
-          this.showGameWon();
+          setTimeout(() =>
+          {
+            this.showGameWon();
+          }, animationTimeSpawn);
         }
 
         else if (this.isGameOver())
         {
           this.gameOver = true;
-          this.showGameOver();
+
+          //to allow new tile to spawn
+          setTimeout(() =>
+          {
+            this.showGameOver();
+          }, animationTimeSpawn);
         }
+
       }, this.animationTimeMove);
     }
 
