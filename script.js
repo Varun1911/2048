@@ -17,6 +17,11 @@ class Game2048
     // Store tiles that need to be animated and then removed
     this.tilesToRemove = [];
 
+    // Undo functionality
+    this.gameStates = []; // Stack to store previous game states
+    this.maxUndoStates = 2; // Limit undo history to prevent memory issues
+    this.canUndo = false;
+
     this.createBoardUI(BOARD_SIZE)
     this.init(BOARD_SIZE);
     this.setupEventListeners();
@@ -80,6 +85,9 @@ class Game2048
     const board = document.querySelector('.board');
 
     // * Dynamic board size ==
+    let tileSizeMult = 4 / this.BOARD_SIZE;
+    document.documentElement.style.setProperty("--BOARD-SIZE", tileSizeMult);
+
 
     //grid templates
     board.style.gridTemplateColumns = `repeat(${size}, calc(var(--TILE-SIZE) + var(--PADDING-BOARD) * 2))`;
@@ -109,6 +117,11 @@ class Game2048
     this.tileId = 0;
     this.tiles.clear();
     this.tilesToRemove = [];
+
+    // Clear undo history on new game
+    this.gameStates = [];
+    this.canUndo = false;
+    this.updateUndoButton();
 
     //remove existing tiles
     const board = document.querySelector('.board');
@@ -154,6 +167,15 @@ class Game2048
         this.move(direction);
       }
 
+      // Add undo button event listener
+      const undoBtn = document.querySelector('.undo-btn');
+      if (undoBtn)
+      {
+        undoBtn.addEventListener('click', () =>
+        {
+          this.undo();
+        });
+      }
     })
   }
 
@@ -266,7 +288,7 @@ class Game2048
   }
 
 
-  createTileElement(tile)
+  createTileElement(tile, isUndoAnimation = false)
   {
     const board = document.querySelector('.board');
 
@@ -274,7 +296,7 @@ class Game2048
     tileElement.id = `tile-${tile.id}`;
     tileElement.className = `tile tile-${tile.value}`;
 
-    if (tile.isNew)
+    if (tile.isNew || isUndoAnimation)
     {
       tileElement.classList.add('tile-new');
     }
@@ -311,6 +333,10 @@ class Game2048
     let moved = false;
     // Clear previous tiles to remove
     this.tilesToRemove = [];
+
+    // Save current state before making a move
+    this.saveGameState();
+
 
     switch (direction)
     {
@@ -371,6 +397,13 @@ class Game2048
         }
 
       }, this.animationTimeMove);
+    }
+    else 
+    {
+      // If no move was made, remove the saved state
+      this.gameStates.pop();
+      this.canUndo = this.gameStates.length > 0;
+      this.updateUndoButton();
     }
 
   }
@@ -737,7 +770,6 @@ class Game2048
       this.setBestScoreInStorage();
     }
 
-    // TODO update best UI
     let bestScoreElement = document.querySelector(`.best-score-container .score`)
     bestScoreElement.textContent = this.best;
   }
@@ -859,6 +891,185 @@ class Game2048
   showGameOver()
   {
     alert("Game Over");
+  }
+
+
+  // *UNDO Functionality
+
+  saveGameState()
+  {
+    const gameState = {
+      grid: this.deepCopyGrid(),
+      tiles: this.deepCopyTiles(),
+      score: this.score,
+      gameWon: this.gameWon,
+      gameOver: this.gameOver,
+      tileId: this.tileId
+    };
+
+    this.gameStates.push(gameState);
+
+    // Limit the number of stored states
+    if (this.gameStates.length > this.maxUndoStates)
+    {
+      this.gameStates.shift();
+    }
+
+    this.canUndo = true;
+    this.updateUndoButton();
+  }
+
+
+  deepCopyGrid()
+  {
+    return this.grid.map(row =>
+      row.map(tile => tile ? {...tile} : null)
+    );
+  }
+
+
+  deepCopyTiles()
+  {
+    const tilesCopy = new Map();
+    this.tiles.forEach((tile, id) =>
+    {
+      tilesCopy.set(id, {...tile});
+    });
+    return tilesCopy;
+  }
+
+
+  undo()
+  {
+    if (!this.canUndo || this.gameStates.length === 0 || !this.allowInput)
+    {
+      return;
+    }
+
+    this.allowInput = false;
+
+    const previousState = this.gameStates.pop();
+
+    // Store current tiles for animation
+    const currentTiles = new Map(this.tiles);
+
+    // Restore previous state
+    this.grid = previousState.grid;
+    this.tiles = previousState.tiles;
+    this.score = previousState.score;
+    this.gameWon = previousState.gameWon;
+    this.gameOver = previousState.gameOver;
+    this.tileId = previousState.tileId;
+
+    // Update UI immediately for score
+    this.updateDisplay();
+
+    // Animate tiles back to their previous positions
+    this.animateUndo(currentTiles);
+
+    // Update undo button state
+    this.canUndo = this.gameStates.length > 0;
+    this.updateUndoButton();
+
+    setTimeout(() =>
+    {
+      this.allowInput = true;
+    }, this.animationTimeMove);
+  }
+
+
+  animateUndo(currentTiles)
+  {
+    // Remove the newly spawned tile
+    for (const id of currentTiles.keys())
+    {
+      if (!this.tiles.has(id))
+      {
+        const tileElement = document.querySelector(`#tile-${id}`);
+        if (tileElement)
+        {
+          // Animate tile disappearing
+          tileElement.animate(
+            {
+              transform: ['scale(1)', 'scale(0)'],
+              opacity: ['1', '0']
+            },
+            {
+              duration: this.animationTimeMove / 2,
+              fill: 'forwards'
+            }
+          ).finished.then(() =>
+          {
+            tileElement.remove();
+          });
+        }
+
+        break;
+      }
+    }
+
+    // creat tiles that got merged
+    this.tiles.forEach((tile, id) =>
+    {
+      if (!currentTiles.has(id))
+      {
+        this.createTileElement(tile, true); // true for undo animation
+      }
+    });
+
+    // Animate existing tiles to their previous positions
+    this.tiles.forEach((tile, id) =>
+    {
+      if (currentTiles.has(id))
+      {
+        const tileElement = document.querySelector(`#tile-${id}`);
+        if (tileElement)
+        {
+          const currentTile = currentTiles.get(id);
+          const {left: newLeft, top: newTop} = this.getTileElementPosition(tile);
+          const {left: oldLeft, top: oldTop} = this.getTileElementPosition(currentTile);
+
+          // Update tile value and class if it changed
+          if (tile.value !== currentTile.value)
+          {
+            tileElement.textContent = tile.value;
+            tileElement.className = `tile tile-${tile.value}`;
+          }
+
+
+          const offsetMult = 0.05;
+          // Animate to previous position
+          const animation = tileElement.animate(
+            {
+              left: [`${oldLeft}%`, `${newLeft + (newLeft - oldLeft) * offsetMult}%`, `${newLeft}%`],
+              top: [`${oldTop}%`, `${newTop + (newTop - oldTop) * offsetMult}%`, `${newTop}%`],
+              offset: [0, 0.8, 1]
+            },
+            {
+              duration: this.animationTimeMove,
+              fill: "forwards",
+              easing: "ease-out"
+            }
+          );
+
+          animation.finished.then(() =>
+          {
+            tileElement.style.left = `${newLeft}%`;
+            tileElement.style.top = `${newTop}%`;
+          });
+        }
+      }
+    });
+  }
+
+  updateUndoButton()
+  {
+    const undoBtn = document.querySelector('.undo-btn');
+    if (undoBtn)
+    {
+      undoBtn.disabled = !this.canUndo;
+      undoBtn.style.opacity = this.canUndo ? '1' : '0.5';
+    }
   }
 
 }

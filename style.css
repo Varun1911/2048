@@ -22,7 +22,8 @@
     --COLOR-S: #f5f5f5;
 
     /* MISC */
-    --TILE-SIZE: clamp(3.5rem, min(17dvw, 20dvh), 6rem);
+    --BOARD-SIZE: 1;
+    --TILE-SIZE: clamp(3rem*var(--BOARD-SIZE), min(15dvw*var(--BOARD-SIZE), 18dvh*var(--BOARD-SIZE)), 5rem*var(--BOARD-SIZE));
     --PADDING-BOARD: calc(var(--TILE-SIZE) / 18);
     --BOARD-BORDER-RADIUS : clamp(0.5rem, 1.5dvw, 1.5rem);
     --TILE-BORDER-RADIUS: clamp(0.25rem, 0.8dvw, 1rem);
@@ -131,8 +132,35 @@ main {
     flex: 1 1 0;
     display: grid;
     place-content: center;
+    gap: 1rem;
 }
 
+
+.power-ups-container
+{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #000;
+    padding: 1rem;
+    border-radius: var(--BOARD-BORDER-RADIUS);
+}
+
+
+.power-up
+{
+    color: whitesmoke;
+    position: relative;
+}
+
+
+.power-up__count
+{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(50%, 50%);
+}
 
 .board {
     background-color: var(--BGCOLOR-BOARD);
@@ -291,6 +319,17 @@ main {
     background-color: hsl(12, 96%, 64%);
     color: #fff;
     font-size: var(--FS-S);
+}
+
+
+
+footer
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 8dvw;
+    color: gray;
 }
 
 
