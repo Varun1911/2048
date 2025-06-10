@@ -47,8 +47,8 @@ body {
 header
 {
     padding: 1.5rem 1rem;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr min-content  1fr;
     align-items: center;
 }
 
@@ -57,7 +57,11 @@ header
     color: var(--COLOR-P);
 }
 
-
+.new-game-btn-container
+{
+    display: flex;
+    justify-content: flex-end;
+}
 
 .new-game-btn
 {
@@ -82,13 +86,17 @@ header
 
 .score-wrapper
 {
+    /* width: calc((var(--TILE-SIZE) + var(--PADDING-BOARD)) * var(--BOARD-SIZE) + var(--PADDING-BOARD)); */
+    width: max-content;
     display: flex;
     gap: 1rem;
+    justify-content: center;
 }
 
 
 .score-container
 {
+    flex: 1 1 0;
     width: 7rem;
     border-radius: 10px;
     color: var(--COLOR-P);
@@ -342,8 +350,9 @@ footer
 {
     header
     {
-        flex-flow: column wrap;
-        align-items: stretch;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        /* grid-template-rows: repeat(2, 1fr); */
         gap : 1rem;
     }
     .new-game-btn
@@ -352,15 +361,6 @@ footer
         pointer-events: none;
     }
 
-    .score-wrapper
-    {
-        flex : 1 1 0;
-    }
-    
-    .score-container
-    {
-        flex: 1 1 0;
-    }
 }
 
 

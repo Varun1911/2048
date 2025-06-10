@@ -110,6 +110,24 @@ class Game2048
         board.appendChild(tile);
       }
     }
+
+    this.updateScoreBoxWidth();
+  }
+
+
+  updateScoreBoxWidth()
+  {
+    const scoreWrapper = document.querySelector('.score-wrapper');
+    const board = document.querySelector('.board');
+
+
+    let width = board.getBoundingClientRect().width;
+
+
+    if (board && scoreWrapper)
+    {
+      scoreWrapper.style.width = `${width}px`;
+    }
   }
 
 
@@ -917,7 +935,7 @@ class Game2048
   }
 
 
-  // *UNDO Functionality
+  // *UNDO Powerup
 
   saveGameState()
   {
@@ -1105,7 +1123,7 @@ class Game2048
 
 
 
-  // *Shuffle Functionality
+  // *Shuffle Powerup
 
   shuffleTiles()
   {
@@ -1155,6 +1173,10 @@ class Game2048
       shuffleBtnCount.textContent = this.shuffleRemaining;
     }
   }
+
+
+  // * Swap Powerup
+
 
 }
 
