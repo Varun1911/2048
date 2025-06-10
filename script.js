@@ -20,7 +20,12 @@ class Game2048
     // Undo functionality
     this.gameStates = []; // Stack to store previous game states
     this.maxUndoStates = 2; // Limit undo history to prevent memory issues
+    this.undoRemaining = 2;
     this.canUndo = false;
+
+    // Shuffle Functionality
+    this.maxShuffleCount = 2;
+    this.shuffleRemaining = this.maxShuffleCount;
 
     this.createBoardUI(BOARD_SIZE)
     this.init(BOARD_SIZE);
@@ -120,8 +125,13 @@ class Game2048
 
     // Clear undo history on new game
     this.gameStates = [];
+    this.undoRemaining = 2;
     this.canUndo = false;
     this.updateUndoButton();
+
+    // reset shuffle count
+    this.shuffleRemaining = this.maxShuffleCount;
+    this.updateShuffleButton();
 
     //remove existing tiles
     const board = document.querySelector('.board');
@@ -166,9 +176,11 @@ class Game2048
         e.preventDefault();
         this.move(direction);
       }
+    });
 
-      // Add undo button event listener
+    // Add undo button event listener
       const undoBtn = document.querySelector('.undo-btn');
+
       if (undoBtn)
       {
         undoBtn.addEventListener('click', () =>
@@ -176,7 +188,18 @@ class Game2048
           this.undo();
         });
       }
-    })
+
+
+    // Add shuffle button event listener
+    const shuffleBtn = document.querySelector('.shuffle-btn');
+
+    if (shuffleBtn)
+    {
+      shuffleBtn.addEventListener('click', () =>
+      {
+        this.shuffleTiles();
+      })
+    }
   }
 
 
@@ -402,7 +425,7 @@ class Game2048
     {
       // If no move was made, remove the saved state
       this.gameStates.pop();
-      this.canUndo = this.gameStates.length > 0;
+      this.canUndo = this.gameStates.length > 0 && this.undoRemaining > 0;
       this.updateUndoButton();
     }
 
@@ -915,7 +938,7 @@ class Game2048
       this.gameStates.shift();
     }
 
-    this.canUndo = true;
+    this.canUndo = this.undoRemaining > 0;
     this.updateUndoButton();
   }
 
@@ -946,6 +969,7 @@ class Game2048
       return;
     }
 
+    this.undoRemaining--;
     this.allowInput = false;
 
     const previousState = this.gameStates.pop();
@@ -968,7 +992,7 @@ class Game2048
     this.animateUndo(currentTiles);
 
     // Update undo button state
-    this.canUndo = this.gameStates.length > 0;
+    this.canUndo = this.gameStates.length > 0 && this.undoRemaining > 0;
     this.updateUndoButton();
 
     setTimeout(() =>
@@ -1065,10 +1089,70 @@ class Game2048
   updateUndoButton()
   {
     const undoBtn = document.querySelector('.undo-btn');
+    const undoBtnCount = undoBtn.querySelector('.undo-btn__count');
+
     if (undoBtn)
     {
       undoBtn.disabled = !this.canUndo;
       undoBtn.style.opacity = this.canUndo ? '1' : '0.5';
+    }
+
+    if (undoBtnCount)
+    {
+      undoBtnCount.textContent = this.undoRemaining;
+    }
+  }
+
+
+
+  // *Shuffle Functionality
+
+  shuffleTiles()
+  {
+    // array of all empty spots
+    let emptySpots = Array(this.BOARD_SIZE * this.BOARD_SIZE).fill().map((_, idx) => idx);
+
+    let newGrid = Array(this.BOARD_SIZE).fill().map(() => Array(this.BOARD_SIZE).fill(null));
+
+    this.tiles.forEach(tile => 
+    {
+      let randomIdx = emptySpots[Math.floor(Math.random() * emptySpots.length)];
+
+      let row = Math.floor(randomIdx / this.BOARD_SIZE);
+      let col = randomIdx % this.BOARD_SIZE;
+
+      tile.row = row;
+      tile.col = col;
+
+      newGrid[row][col] = tile;
+
+      let indexToRemove = emptySpots.indexOf(randomIdx);
+      emptySpots.splice(indexToRemove, 1);
+    }
+    )
+
+    this.animateTiles();
+    this.grid = newGrid;
+
+    this.shuffleRemaining--;
+    this.updateShuffleButton();
+  }
+
+
+  updateShuffleButton()
+  {
+    const shuffleBtn = document.querySelector('.shuffle-btn');
+    const shuffleBtnCount = shuffleBtn.querySelector('.shuffle-btn__count');
+
+    if (shuffleBtn)
+    {
+      shuffleBtn.disabled = !(this.shuffleRemaining > 0);
+      shuffleBtn.style.opacity = this.shuffleRemaining > 0 ? '1' : '0.5';
+    }
+
+    if (shuffleBtnCount)
+    {
+      shuffleBtnCount.textContent = this.shuffleRemaining;
     }
   }
 

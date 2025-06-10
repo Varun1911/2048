@@ -23,7 +23,7 @@
 
     /* MISC */
     --BOARD-SIZE: 1;
-    --TILE-SIZE: clamp(3rem*var(--BOARD-SIZE), min(15dvw*var(--BOARD-SIZE), 18dvh*var(--BOARD-SIZE)), 5rem*var(--BOARD-SIZE));
+    --TILE-SIZE: clamp(2.5rem * var(--BOARD-SIZE), min(15dvw * var(--BOARD-SIZE), 18dvh * var(--BOARD-SIZE)), 4.5rem * var(--BOARD-SIZE));
     --PADDING-BOARD: calc(var(--TILE-SIZE) / 18);
     --BOARD-BORDER-RADIUS : clamp(0.5rem, 1.5dvw, 1.5rem);
     --TILE-BORDER-RADIUS: clamp(0.25rem, 0.8dvw, 1rem);
@@ -36,7 +36,7 @@
 }
 
 body {
-    min-height: 100dvh;
+    height: 100dvh;
     background-color: var(--BGCOLOR);
     display: flex;
     flex-direction: column;
