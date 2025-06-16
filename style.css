@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
+
 /* RESET */
 * {
     margin: 0;
@@ -10,23 +11,27 @@
 /* VARIABLES */
 :root {
     /* FONTS */
+    --FF-H : sans-serif;
     --FF: "Rubik", sans-serif;
     --FS-P: clamp(1.5rem, 3vw + 0.8rem, 2.2rem);
     --FS-S: clamp(1.3rem, 2.5vw + 0.8rem, 2rem);
+    --FS-T: clamp(1.3rem, 2.5vw + 0.8rem, 2rem);
 
     /* COLORS */
-    --BGCOLOR: rgb(250 248 240);
-    --BGCOLOR-BOARD: rgb(156, 136, 121);
-    --BGCOLOR-TILE: rgb(189, 172, 151);
-    --COLOR-P: #756452;
-    --COLOR-S: #f5f5f5;
+    --BGCOLOR: #FBFFED;
+    --COLOR-GREEN-DARK: #415B4C;
+    --COLOR-GREEN: #5DAA7E;
+    --COLOR-GREEN-LIGHT: #D6EEE0;
+    --COLOR-P: #F5F5F5;
+    --COLOR-ORANGE: #FF816B;
+    --COLOR-GRAY: #676767;
 
     /* MISC */
-    --BOARD-SIZE: 1;
-    --TILE-SIZE: clamp(2.5rem * var(--BOARD-SIZE), min(15dvw * var(--BOARD-SIZE), 18dvh * var(--BOARD-SIZE)), 4.5rem * var(--BOARD-SIZE));
-    --PADDING-BOARD: calc(var(--TILE-SIZE) / 18);
-    --BOARD-BORDER-RADIUS : clamp(0.5rem, 1.5dvw, 1.5rem);
-    --TILE-BORDER-RADIUS: clamp(0.25rem, 0.8dvw, 1rem);
+    --BOARD-SIZE-MULT: 1;
+    --TILE-SIZE: clamp(2rem * var(--BOARD-SIZE-MULT), min(13dvw * var(--BOARD-SIZE-MULT), 15dvh * var(--BOARD-SIZE-MULT)), 4rem * var(--BOARD-SIZE-MULT));
+    --PADDING-BOARD: calc(var(--TILE-SIZE) / 15);
+    --BOARD-BORDER-RADIUS : clamp(1rem, 1.5dvw, 2rem);
+    --TILE-BORDER-RADIUS: clamp(0.6rem, 0.8dvw, 1.5rem);
     --ANIMATION-TIME-SPAWN: 0.2s;
 }
 
@@ -41,6 +46,7 @@ body {
     display: flex;
     flex-direction: column;
     font-family: var(--FF);
+    overflow: hidden;
 }
 
 
@@ -48,32 +54,38 @@ header
 {
     padding: 1.5rem 1rem;
     display: grid;
-    grid-template-columns: 1fr min-content  1fr;
-    align-items: center;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap : 1rem;
 }
 
 .header__h1 {
+    font-family: var(--FF-H);
     font-size: 3rem;
-    color: var(--COLOR-P);
+    color: var(--COLOR-GREEN-DARK);
 }
 
 .new-game-btn-container
 {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    align-items: center;
+    
 }
 
 .new-game-btn
 {
     border : none;
-    background-color: var(--BGCOLOR-BOARD);
+    background-color: var(--COLOR-ORANGE);
     font: inherit;
     font-size: 1rem;
     font-weight: 450;
-    color: var(--COLOR-S);
+    color: var(--BGCOLOR);
     padding: 0 1rem;
     height: 2.5rem;
-    border-radius: 0.5rem;
+    width: 100%;
+    border-radius: 2rem;
+    box-shadow: 0 -1px 4px 2px rgba(0, 0, 0, 0.25);
 }
 
 
@@ -112,13 +124,13 @@ header
 
 .current-score-container
 {
-    background-color: #eae7d9;
+    background-color: var(--COLOR-GREEN-DARK);
 }  
 
 
 .best-score-container
 {
-    background: transparent;
+    background: var(--COLOR-GREEN);
     border: 2px solid #eae7d9;
 
 }
@@ -139,7 +151,9 @@ header
 main {
     flex: 1 1 0;
     display: grid;
-    place-content: center;
+    justify-content: center;
+    align-content: start;
+    padding: 2rem;
     gap: 1rem;
 }
 
@@ -149,18 +163,37 @@ main {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #000;
-    padding: 1rem;
+    background-color: var(--COLOR-GREEN-DARK);
+    padding: 0.25rem;
     border-radius: var(--BOARD-BORDER-RADIUS);
+    height: clamp(2rem, 12dvw, 4rem);
+    box-shadow: 0 -1px 4px 2px rgba(0, 0, 0, 0.25);
 }
 
 
 .power-up
 {
-    color: whitesmoke;
+    height: 55%;
     position: relative;
 }
 
+.power-up figure
+{
+    height: 100%;
+}
+
+
+.power-up figure img
+{
+    height: 100%;
+    width: auto;
+}
+
+.power-up figcaption
+{
+    position: absolute;
+    left: -10000px;
+}
 
 .power-up__count
 {
@@ -168,10 +201,11 @@ main {
     bottom: 0;
     right: 0;
     transform: translate(50%, 50%);
+    color: #FF85D0;
 }
 
 .board {
-    background-color: var(--BGCOLOR-BOARD);
+    background-color: var(--COLOR-GREEN-DARK);
     border-radius: var(--BOARD-BORDER-RADIUS);
     display: grid;
     /* grid-template-columns: repeat(4, calc(var(--TILE-SIZE) + 10px));
@@ -182,15 +216,16 @@ main {
     box-shadow: 0 0 1.8dvw -0.7dvw black;
 
     position: relative;
+    margin-bottom: 3rem;
 }
 
 
 .tile-container {
-    background-color: var(--BGCOLOR-TILE);
+    background-color: var(--COLOR-GREEN-LIGHT);
     height: var(--TILE-SIZE);
     width: var(--TILE-SIZE);
     border-radius: var(--TILE-BORDER-RADIUS);
-    box-shadow: inset 0 0 0.5dvw -0.2dvw rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 3px 2px rgba(0, 0, 0, 0.25);
 }
 
 
@@ -209,6 +244,7 @@ main {
 
     transform-origin: center;
     z-index: 1;
+    box-shadow: inset 0 0 3px 2px rgba(0, 0, 0, 0.25)
 }
 
 
@@ -257,79 +293,83 @@ main {
 
 
 .tile-2 {
-    background-color: #ede4da;
-    color: #756452;
+    background-color: #FFF6EE;
+    color: #648D75;
 }
 
 .tile-4 {
-    background-color: #ebd7b5;
-    color: #756452;
+    background-color: #F8EFB9;
+    color: #648D75;
 }
 
 .tile-8 {
-    background-color: #f2b177;
-    color: #fff;
+    background-color: #F4EB54;
+    color: #FF8C26;
 }
 
 
 .tile-16 {
-    background-color: #f69461;
-    color: #fff;
+    background-color: #FFF21F;
+    color: #356E18;
 }
 
 .tile-32 {
-    background-color: #f67f63;
-    color: #fff;
+    background-color: #F58F41;
+    color: #F8EFB9;
 }
 
 
 .tile-64 {
-    background-color: #f76442;
-    color: #fff;
+    background-color: #FF816B;
+    color: #F8EFB9;
 }
 
 
 .tile-128 {
-    background-color: hsl(46, 83%, 68%);
-    color: #fff;
+    background-color: #FF593C;
+    color: #F8EFB9;
     font-size: var(--FS-S);
 }
 
 .tile-256 {
-    background-color: hsl(47, 84%, 68%);
-    color: #fff;
+    background-color: #C72B0F;
+    color: #F8EFB9;
     font-size: var(--FS-S);
 }
 
 
 .tile-512 {
-    background-color: hsl(47, 90%, 68%);
-    color: #fff;
+    background-color: #96FFB2;
+    color: #3C636C;
     font-size: var(--FS-S);
 }
 
 
 .tile-1024 {
-    background-color: hsl(47, 92%, 68%);
-    color: #fff;
-    font-size: var(--FS-S);
+    background-color: #3FC562;
+    color: #FFF21F;
+    font-size: var(--FS-T);
 }
 
 
 .tile-2048 {
-    background-color: hsl(48, 95%, 68%);
+    background-color: #356E18;
     color: #fff;
-    font-size: var(--FS-S);
+    font-size: var(--FS-T);
 }
 
 
 .tile-4096 {
-    background-color: hsl(12, 96%, 64%);
-    color: #fff;
-    font-size: var(--FS-S);
+    background-color: #57A8C9;
+    color: #E9FFDB;
+    font-size: var(--FS-T);
 }
 
-
+.tile-8192{
+    background-color: #184D6E;
+    color: #E9FFDB;
+    font-size: var(--FS-T);
+}
 
 footer
 {
@@ -355,12 +395,6 @@ footer
         /* grid-template-rows: repeat(2, 1fr); */
         gap : 1rem;
     }
-    .new-game-btn
-    {
-        display: none;
-        pointer-events: none;
-    }
-
 }
 
 

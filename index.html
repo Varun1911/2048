@@ -7,12 +7,16 @@
     <title>Tile Twist</title>
     <link rel="stylesheet" href="./style.css">
     <script type="module" src="./script.js" defer></script>
+    <link rel="icon" type="image/png" sizes="48x48" href="assets/icons/Tile_Twist_favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/Tile_Twist_favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/Tile_Twist_favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/Tile_Twist_favicon-180x180.png">
 </head>
 
 <body>
     <header>
         <h1 class="header__h1">
-            2048
+            Tile Twist
         </h1>
         <div class="score-wrapper">
             <div class="current-score-container score-container">
@@ -24,40 +28,49 @@
                 <span class="score">2048</span>
             </div>
         </div>
-        <div class="new-game-btn-container">
-            <button class="new-game-btn">
-                New Game
-            </button>
-        </div>
     </header>
     <main>
         <div class="board">
         </div>
         <div class="power-ups-container">
             <div class="undo-btn power-up">
-                undo
+                <figure>
+                    <img src="assets/icons/undo-icon.png" alt="Undo Btn">
+                    <figcaption>Undo</figcaption>
+                </figure>
                 <div class="undo-btn__count power-up__count">
                     2
                 </div>
             </div>
             <div class="shuffle-btn power-up">
-                shuffle
+                <figure>
+                    <img src="assets/icons/shuffle-icon.png" alt="Shuffle Btn">
+                    <figcaption>Shuffle</figcaption>
+                </figure>
                 <div class="shuffle-btn__count power-up__count">
                     2
                 </div>
             </div>
             
             <div class="swap-btn power-up">
-                swap
+                <figure>
+                    <img src="assets/icons/swap-icon.png" alt="Swao Btn">
+                    <figcaption>Swap</figcaption>
+                </figure>
                 <div class="swap-btn__count power-up__count">
                     2
                 </div>
             </div>
         </div>
+        <div class="new-game-btn-container">
+            <button class="new-game-btn">
+                New Game
+            </button>
+        </div>
     </main>
-    <footer class="center">
+    <!-- <footer class="center">
         Created By Varun Taneja
-    </footer>
+    </footer> -->
 </body>
 
 </html>

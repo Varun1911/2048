@@ -13,7 +13,7 @@ class Game2048
     this.tiles = new Map(); // Track tiles for animation
     this.allowInput = true;
     // in ms
-    this.animationTimeMove = 200;
+    this.animationTimeMove = 150;
     // Store tiles that need to be animated and then removed
     this.tilesToRemove = [];
 
