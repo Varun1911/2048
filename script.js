@@ -90,8 +90,9 @@ class Game2048
     const board = document.querySelector('.board');
 
     // * Dynamic board size ==
-    let tileSizeMult = 4 / this.BOARD_SIZE;
-    document.documentElement.style.setProperty("--BOARD-SIZE", tileSizeMult);
+    // let tileSizeMult = 4 / this.BOARD_SIZE;
+    // document.documentElement.style.setProperty("--BOARD-SIZE-MULT", tileSizeMult);
+    document.documentElement.style.setProperty("--BOARD-SIZE", this.BOARD_SIZE);
 
 
     //grid templates
@@ -197,15 +198,15 @@ class Game2048
     });
 
     // Add undo button event listener
-      const undoBtn = document.querySelector('.undo-btn');
+    const undoBtn = document.querySelector('.undo-btn');
 
-      if (undoBtn)
+    if (undoBtn)
+    {
+      undoBtn.addEventListener('click', () =>
       {
-        undoBtn.addEventListener('click', () =>
-        {
-          this.undo();
-        });
-      }
+        this.undo();
+      });
+    }
 
 
     // Add shuffle button event listener
@@ -228,7 +229,7 @@ class Game2048
     document.addEventListener('touchmove', function (e)
     {
       e.preventDefault();
-    }, {passive: false});
+    }, { passive: false });
 
     // Touch start
     document.body.addEventListener('touchstart', (e) =>
@@ -964,7 +965,7 @@ class Game2048
   deepCopyGrid()
   {
     return this.grid.map(row =>
-      row.map(tile => tile ? {...tile} : null)
+      row.map(tile => tile ? { ...tile } : null)
     );
   }
 
@@ -974,7 +975,7 @@ class Game2048
     const tilesCopy = new Map();
     this.tiles.forEach((tile, id) =>
     {
-      tilesCopy.set(id, {...tile});
+      tilesCopy.set(id, { ...tile });
     });
     return tilesCopy;
   }
@@ -1068,8 +1069,8 @@ class Game2048
         if (tileElement)
         {
           const currentTile = currentTiles.get(id);
-          const {left: newLeft, top: newTop} = this.getTileElementPosition(tile);
-          const {left: oldLeft, top: oldTop} = this.getTileElementPosition(currentTile);
+          const { left: newLeft, top: newTop } = this.getTileElementPosition(tile);
+          const { left: oldLeft, top: oldTop } = this.getTileElementPosition(currentTile);
 
           // Update tile value and class if it changed
           if (tile.value !== currentTile.value)
