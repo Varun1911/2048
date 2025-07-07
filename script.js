@@ -112,22 +112,52 @@ class Game2048
       }
     }
 
-    this.updateScoreBoxWidth();
+    this.setScoreContainerWidth();
+    this.setPowerUpContainerWidth();
+    this.setNewGameBtnWidth();
   }
 
 
-  updateScoreBoxWidth()
+  setScoreContainerWidth()
   {
     const scoreWrapper = document.querySelector('.score-wrapper');
+    const board = document.querySelector('.board');
+
+    let width = board.getBoundingClientRect().width;
+
+    if (board && scoreWrapper)
+    {
+      scoreWrapper.style.width = `${(width * 0.75) / window.innerHeight * 100}dvh`;
+    }
+  }
+
+
+  setPowerUpContainerWidth()
+  {
+    const powerUpContainer = document.querySelector('.power-ups-container');
+    const board = document.querySelector('.board');
+
+    let width = board.getBoundingClientRect().width;
+
+    if (board && powerUpContainer)
+    {
+      powerUpContainer.style.width = `${(width * 0.75) / window.innerHeight * 100}dvh`;
+    }
+  }
+
+
+  setNewGameBtnWidth()
+  {
+    const btnContainer = document.querySelector('.new-game-btn-container');
     const board = document.querySelector('.board');
 
 
     let width = board.getBoundingClientRect().width;
 
 
-    if (board && scoreWrapper)
+    if (board && btnContainer)
     {
-      scoreWrapper.style.width = `${width}px`;
+      btnContainer.style.width = `${(width * 0.481) / window.innerHeight * 100}dvh`;
     }
   }
 

@@ -18,9 +18,12 @@
     /* FONTS */
     --FF-H: "Zilap-Monograma", sans-serif;
     --FF: "Rubik", sans-serif;
-    --FS-P: clamp(1.5rem, 3vw + 0.8rem, 2.2rem);
+    /* --FS-P: clamp(1.5rem, 3vw + 0.8rem, 2.2rem);
     --FS-S: clamp(1.3rem, 2.5vw + 0.8rem, 2rem);
-    --FS-T: clamp(1.3rem, 2.5vw + 0.8rem, 2rem);
+    --FS-T: clamp(1.3rem, 2.5vw + 0.8rem, 2rem); */
+    --FS-P: 3.3dvh;
+    --FS-S: 3dvh;
+    --FS-T: 2.7dvh;
 
     /* COLORS */
     --BGCOLOR: #FBFFED;
@@ -34,10 +37,12 @@
     /* MISC */
     --BOARD-SIZE: 1;
     /* --TILE-SIZE: clamp(3rem * var(--BOARD-SIZE-MULT), min(18dvw * var(--BOARD-SIZE-MULT), 20dvh * var(--BOARD-SIZE-MULT)), 4.5rem * var(--BOARD-SIZE-MULT)); */
-    --TILE-SIZE: calc(43.1dvh * 15 / (16 * var(--BOARD-SIZE) + 1));
+    --TILE-SIZE: calc(43.1dvh * 15 / (17 * var(--BOARD-SIZE) + 2));
     --PADDING-BOARD: calc(var(--TILE-SIZE) / 15);
-    --BOARD-BORDER-RADIUS: clamp(1.2rem, 1.5dvw, 2rem);
-    --TILE-BORDER-RADIUS: clamp(0.7rem, 0.8dvw, 1.5rem);
+    /* --BOARD-BORDER-RADIUS: clamp(1.2rem, 2.94dvh, 2rem);
+    --TILE-BORDER-RADIUS: clamp(0.7rem, 1.85dvh, 1.5rem); */
+    --BOARD-BORDER-RADIUS: 2.94dvh;
+    --TILE-BORDER-RADIUS: 1.85dvh;
     --ANIMATION-TIME-SPAWN: 0.2s;
 }
 
@@ -77,6 +82,7 @@ main {
     display: grid;
     justify-content: center;
     align-content: start;
+    justify-items: center;
     margin-top: 6.54dvh;
 }
 
@@ -84,7 +90,7 @@ main {
 .score-wrapper {
     /* width: calc((var(--TILE-SIZE) + var(--PADDING-BOARD)) * var(--BOARD-SIZE) + var(--PADDING-BOARD)); */
     display: flex;
-    gap: 0.594px;
+    gap: 0.647dvh;
     justify-content: center;
 }
 
@@ -95,14 +101,12 @@ main {
     text-transform: uppercase;
 
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-flow: column wrap;
+    justify-content: space-between;
+    align-items: center;
 
-    width: calc((var(--TILE-SIZE) + var(--PADDING-BOARD)) * var(--BOARD-SIZE) + var(--PADDING-BOARD));
     padding: 0 1.41dvh;
     height: 4.47dvh;
-    border-radius: 2.94dvh;
+    border-radius: var(--BOARD-BORDER-RADIUS);
 }
 
 
@@ -117,14 +121,12 @@ main {
 
 
 .score-container .score {
-    font-size: clamp(1rem, 2.61dvh, 1.5rem);
+    font-size: 2.2dvh;
     font-weight: bold;
-    align-self: flex-end;
-
 }
 
 .score-container .text {
-    font-size: clamp(0.75rem, 1.74dvh, 1rem);
+    font-size: 1.4dvh;
 }
 
 
@@ -133,15 +135,14 @@ main {
     justify-content: space-around;
     align-items: center;
     background-color: var(--COLOR-GREEN-DARK);
-    padding: 0.25rem;
     border-radius: var(--BOARD-BORDER-RADIUS);
-    height: clamp(2rem, 20dvw, 4rem);
+    height: 6.32dvh;
     box-shadow: 0 -1px 4px 2px rgba(0, 0, 0, 0.25);
 }
 
 
 .power-up {
-    height: 55%;
+    height: 44%;
     position: relative;
 }
 
@@ -165,7 +166,7 @@ main {
     bottom: 0;
     right: 0;
     transform: translate(50%, 50%);
-    font-size: 2.5dvh;
+    font-size: 2.18dvh;
     font-weight: bold;
     color: #FF85D0;
 }
@@ -176,20 +177,20 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-
+    margin: 0.76dvh 0;
 }
 
 .new-game-btn {
     border: none;
     background-color: var(--COLOR-ORANGE);
     font: inherit;
-    font-size: 2.8dvh;
+    font-size: 2.39dvh;
     font-weight: bold;
     color: #F8EFB9;
     padding: 0 1rem;
-    height: 2.5rem;
     width: 100%;
-    border-radius: 2rem;
+    height: 4.47dvh;
+    border-radius: var(--BOARD-BORDER-RADIUS);
     box-shadow: 0 -1px 4px 2px rgba(0, 0, 0, 0.25);
 }
 
@@ -210,8 +211,8 @@ main {
     padding: var(--PADDING-BOARD);
     box-shadow: 0 0 1.8dvw -0.7dvw black;
 
+    margin: 4.21dvh 0 8.48dvh;
     position: relative;
-    margin-bottom: 3rem;
     border-radius: var(--BOARD-BORDER-RADIUS);
 }
 
