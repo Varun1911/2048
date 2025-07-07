@@ -380,7 +380,12 @@ footer {
 }
 
 
-@media screen and (min-width: 640px) {}
+@media screen and (max-width: 350px) 
+{
+    :root{
+        --TILE-SIZE: calc(33.1dvh * 15 / (17 * var(--BOARD-SIZE) + 2));
+    }
+}
 
 
 @media screen and (max-width: 768px) {}
