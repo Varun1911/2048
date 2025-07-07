@@ -16,6 +16,8 @@
     <link rel="preload" href="./assets/icons/shuffle-icon.png" as="image" type="image/png">
     <link rel="preload" href="./assets/icons/undo-icon.png" as="image" type="image/png">
     <link rel="preload" href="./assets/icons/swap-icon.png" as="image" type="image/png">
+    <link rel="preload" href="./assets/images/grid-4x4.png" as="image" type="image/png">
+    <link rel="preload" href="./assets/images/grid-5x5.png" as="image" type="image/png">
 </head>
 
 <body>
@@ -74,16 +76,30 @@
             </button>
         </div>
         <div class="new-game-popup menu-popup">
-            <div class="title">
+            <div class="menu-popup__title">
+                New game
+            </div>
+            <button class="grid-4x4-btn menu-btn menu-btn-1">
+                <img src="./assets/images/grid-4x4.png" alt="grid-4x4">
+                <span class="menu-btn__text">4 X 4</span>
+            </button>
+            <button class="grid-5x5-btn menu-btn menu-btn-2">
+                <img src="./assets/images/grid-5x5.png" alt="grid-5x5">
+                <span class="menu-btn__text">5 X 5</span>
+            </button>
+            </div>
+            
+            <div class="game-over-popup menu-popup" style="display: none;">
+                <div class="menu-popup__title">
                 Game Over
             </div>
-            <div class="sub-title">
-                420 points score in 69 moves
+            <div class="menu-popup__sub-title">
+                <span class="score">420</span> points score in <span class="move-count">69</span> moves
             </div>
-            <button class="retry-btn menu-btn">
+            <button class="retry-btn menu-btn menu-btn-1">
                 Retry
             </button>
-            <button class="choose-grid-btn menu-btn">
+            <button class="choose-grid-btn menu-btn menu-btn-2">
                 Choose Grid
             </button>
         </div>

@@ -140,7 +140,7 @@ main {
     background-color: var(--COLOR-GREEN-DARK);
     border-radius: var(--BOARD-BORDER-RADIUS);
     height: 6.32dvh;
-    box-shadow: 0 -1px 4px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 -0.14dvh 0.56dvh 0.28dvh rgba(0, 0, 0, 0.25);
 }
 
 
@@ -151,6 +151,9 @@ main {
 
 .power-up figure {
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -190,11 +193,10 @@ main {
     font-size: 2.39dvh;
     font-weight: bold;
     color: #F8EFB9;
-    padding: 0 1rem;
     width: 100%;
     height: 4.47dvh;
     border-radius: var(--BOARD-BORDER-RADIUS);
-    box-shadow: 0 -1px 4px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 -0.14dvh 0.56dvh 0.28dvh rgba(0, 0, 0, 0.25);
 }
 
 
@@ -224,7 +226,7 @@ main {
     z-index: 5;
 }
 
-.menu-popup .title
+.menu-popup__title
 {
     font-size: 2.92dvh;
     font-weight: bold;
@@ -232,7 +234,7 @@ main {
 }
 
 
-.menu-popup .sub-title
+.menu-popup__sub-title
 {
     font-size: 1.46dvh;
     font-weight: bold;
@@ -247,18 +249,46 @@ main {
     padding: 1.255dvh;
     border-radius: 1.77dvh;
     font-weight: 600;
+
+    display: flex;
+    align-items: center;
 }
 
-.retry-btn
+
+.menu-btn-1
 {
     color: var(--COLOR-ORANGE);
     margin:7.63dvh 0 1.67dvh;
 }
 
 
-.choose-grid-btn
+.menu-btn-2
 {
     color: var(--COLOR-GRAY);
+}
+
+
+.grid-4x4-btn
+{
+    margin: 3.03dvh 0;
+}
+
+
+.grid-5x5-btn
+{
+    color: var(--COLOR-ORANGE);
+}
+
+
+.menu-btn__text
+{
+    flex: 1 1 0;
+}
+
+.menu-btn img
+{
+    height: 7.94dvh;
+    aspect-ratio: 1;
 }
 
 .board {
@@ -269,7 +299,7 @@ main {
     align-items: center;
     justify-items: center;
     padding: var(--PADDING-BOARD);
-    box-shadow: 0 0 1.8dvw -0.7dvw black;
+    box-shadow: 0 0 1.5dvh -0.2dvh black;
 
     margin: 4.21dvh 0 8.48dvh;
     position: relative;
@@ -282,7 +312,7 @@ main {
     height: var(--TILE-SIZE);
     width: var(--TILE-SIZE);
     border-radius: var(--TILE-BORDER-RADIUS);
-    box-shadow: inset 0 0 3px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 0 0.42dvh 0.28dvh rgba(0, 0, 0, 0.25);
 }
 
 
@@ -301,7 +331,7 @@ main {
 
     transform-origin: center;
     z-index: 1;
-    box-shadow: inset 0 0 3px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 0 0.42dvh 0.28dvh rgba(0, 0, 0, 0.25);
 
     background-color: #184D6E;
     color: #E9FFDB;
@@ -437,6 +467,7 @@ footer {
     align-items: center;
     height: 8dvw;
     color: gray;
+    font-size: 2.27dvh;
 }
 
 
