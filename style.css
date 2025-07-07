@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
+/* @import url("https://use.typekit.net/uwj5uaa.css"); */
+
 @font-face {
     font-family: Zilap-Monograma;
     src: url(./assets/fonts/Zilap\ Monograma\ DEMO.ttf);
@@ -84,6 +86,7 @@ main {
     align-content: start;
     justify-items: center;
     margin-top: 6.54dvh;
+    position: relative;
 }
 
 
@@ -200,6 +203,63 @@ main {
     opacity: 0.8;
 }
 
+
+.menu-popup
+{
+    background-color: var(--COLOR-GREEN-DARK);
+    font-family: var(--FF);
+    color: var(--BGCOLOR);
+    border: 0.313dvh solid var(--BGCOLOR);
+    border-radius: 1.77dvh;
+    box-shadow: 0 0.418dvh 1.46dvh 0.523dvh #000;
+    padding: 1.88dvh 2.61dvh 2.61dvh;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    align-items: center;
+    flex-flow: column wrap;
+    z-index: 5;
+}
+
+.menu-popup .title
+{
+    font-size: 2.92dvh;
+    font-weight: bold;
+    margin-bottom: 1.255dvh;
+}
+
+
+.menu-popup .sub-title
+{
+    font-size: 1.46dvh;
+    font-weight: bold;
+}
+
+
+.menu-btn
+{
+    border: none;
+    background-color: var(--BGCOLOR);
+    font-size: 2.92dvh;
+    padding: 1.255dvh;
+    border-radius: 1.77dvh;
+    font-weight: 600;
+}
+
+.retry-btn
+{
+    color: var(--COLOR-ORANGE);
+    margin:7.63dvh 0 1.67dvh;
+}
+
+
+.choose-grid-btn
+{
+    color: var(--COLOR-GRAY);
+}
 
 .board {
     background-color: var(--COLOR-GREEN-DARK);

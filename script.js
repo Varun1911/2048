@@ -115,6 +115,7 @@ class Game2048
     this.setScoreContainerWidth();
     this.setPowerUpContainerWidth();
     this.setNewGameBtnWidth();
+    this.setMenuBtnWidth();
   }
 
 
@@ -158,6 +159,26 @@ class Game2048
     if (board && btnContainer)
     {
       btnContainer.style.width = `${(width * 0.481) / window.innerHeight * 100}dvh`;
+    }
+  }
+
+
+  setMenuBtnWidth()
+  {
+    const menuBtns = document.querySelectorAll('.menu-btn');
+    const board = document.querySelector('.board');
+
+
+    let width = board.getBoundingClientRect().width;
+
+
+    if (board && menuBtns)
+    {
+      menuBtns.forEach(item => 
+      {
+        item.style.width = `${(width * 0.75) / window.innerHeight * 100}dvh`;
+      }
+      )
     }
   }
 
