@@ -1,1 +1,1 @@
-TileTwist 2048 is a sliding tile puzzle game where you combine matching numbers to reach the 2048 tile. Built with JavaScript, HTML, and CSS, it offers smooth gameplay and a responsive design.<br><br> <a href = "tiletwist2048.netlify.app/">Play it here</a>
+TileTwist 2048 is a sliding tile puzzle game where you combine matching numbers to reach the 2048 tile. Built with JavaScript, HTML, and CSS, it offers smooth gameplay and a responsive design.<br><br> <a href = "tiletwist.netlify.app/">Play it here</a>
