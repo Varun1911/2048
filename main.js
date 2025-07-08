@@ -16,6 +16,8 @@ const btnNewGame = document.querySelector('.new-game-btn');
 
 //variables
 let game;
+let board_size;
+let allowNewBtnClick;
 
 //helper functions
 function showPopup(popup)
@@ -35,12 +37,30 @@ function hidePopup(popup)
 }
 
 
+function setNewBtnState(state)
+{
+    if (state)
+    {
+        btnNewGame.style.opacity = 1;
+    }
+
+    else
+    {
+        btnNewGame.style.opacity = 0.8;
+    }
+
+    allowNewBtnClick = state;
+}
 
 // main functions
 function setupEventListeners()
 {
+
+    // grid selection popup
     popupGridSelection.addEventListener('click', (e) => 
     {
+        setNewBtnState(false);
+
         if (e.target.closest('.grid-4x4-btn'))
         {
             startGame(4);
@@ -55,6 +75,16 @@ function setupEventListeners()
         if (e.target.closest('.menu-popup__btn'))
         {
             hidePopup(popupGridSelection);
+            setNewBtnState(true);
+        }
+    });
+
+    // new game btn
+    btnNewGame.addEventListener('click', () =>
+    {
+        if (allowNewBtnClick)
+        {
+            showPopup(popupNewGame);
         }
     })
 }
@@ -62,12 +92,14 @@ function setupEventListeners()
 
 function startGame(size)
 {
+    board_size = size;
     game = new Game2048(size);
 }
 
 ; (() =>
 {
     startGame(4);
+    setNewBtnState(false);
     setupEventListeners();
     showPopup(popupGridSelection);
 })();
