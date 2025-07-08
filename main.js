@@ -113,6 +113,11 @@ function setupEventListeners()
 function startGame(size)
 {
     board_size = size;
+    if (game)
+    {
+        game.dispose();
+        game = null;
+    }
     game = new Game2048(size);
 }
 

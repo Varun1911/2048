@@ -27,10 +27,32 @@ export default class Game2048
     this.maxShuffleCount = 2;
     this.shuffleRemaining = this.maxShuffleCount;
 
+    // to dispose event listeners
+    this.keyDownListener;
+    this.undoBtnListener;
+    this.shuffleBtnListener;
+    this.touchMoveListener;
+    this.touchStartListener;
+    this.touchEndListener;
+
     this.createBoardUI(BOARD_SIZE)
     this.init(BOARD_SIZE);
     this.setupEventListeners();
     this.setupTouchInput();
+  }
+
+  dispose()
+  {
+    document.removeEventListener('keydown', this.keyDownListener);
+    document.removeEventListener('touchmove', this.touchMoveListener);
+    document.body.removeEventListener('touchstart', this.touchStartListener);
+    document.body.removeEventListener('touchend', this.touchEndListener);
+
+    // Remove button listeners
+    const undoBtn = document.querySelector('.undo-btn');
+    const shuffleBtn = document.querySelector('.shuffle-btn');
+    if (undoBtn) undoBtn.removeEventListener('click', this.undoClickListener);
+    if (shuffleBtn) shuffleBtn.removeEventListener('click', this.shuffleClickListener);
   }
 
   // Helper functions
@@ -224,7 +246,7 @@ export default class Game2048
 
   setupEventListeners()
   {
-    document.addEventListener('keydown', (e) =>
+    document.addEventListener('keydown', this.keyDownListener = (e) =>
     {
       if (this.gameOver && !this.gameWon)
         return;
@@ -259,7 +281,7 @@ export default class Game2048
 
     if (undoBtn)
     {
-      undoBtn.addEventListener('click', () =>
+      undoBtn.addEventListener('click', this.undoBtnListener = () =>
       {
         this.undo();
       });
@@ -271,7 +293,7 @@ export default class Game2048
 
     if (shuffleBtn)
     {
-      shuffleBtn.addEventListener('click', () =>
+      shuffleBtn.addEventListener('click', this.shuffleBtnListener = () =>
       {
         this.shuffleTiles();
       })
@@ -283,20 +305,20 @@ export default class Game2048
   {
     let startX, startY, endX, endY;
 
-    document.addEventListener('touchmove', function (e)
+    document.addEventListener('touchmove', this.touchMoveListener = function (e)
     {
       e.preventDefault();
     }, {passive: false});
 
     // Touch start
-    document.body.addEventListener('touchstart', (e) =>
+    document.body.addEventListener('touchstart', this.touchStartListener = (e) =>
     {
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
     });
 
     // Touch end
-    document.body.addEventListener('touchend', (e) =>
+    document.body.addEventListener('touchend', this.touchEndListener = (e) =>
     {
       endX = e.changedTouches[0].clientX;
       endY = e.changedTouches[0].clientY;
