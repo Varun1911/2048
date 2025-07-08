@@ -224,6 +224,7 @@ main {
     align-items: center;
     flex-flow: column wrap;
     z-index: 5;
+    display: none;
 }
 
 .menu-popup__title
@@ -241,7 +242,7 @@ main {
 }
 
 
-.menu-btn
+.menu-popup__btn
 {
     border: none;
     background-color: var(--BGCOLOR);
@@ -252,17 +253,18 @@ main {
 
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 
-.menu-btn-1
+.menu-popup__btn-1
 {
     color: var(--COLOR-ORANGE);
     margin:7.63dvh 0 1.67dvh;
 }
 
 
-.menu-btn-2
+.menu-popup__btn-2
 {
     color: var(--COLOR-GRAY);
 }
@@ -285,7 +287,7 @@ main {
     flex: 1 1 0;
 }
 
-.menu-btn img
+.menu-popup__btn img
 {
     height: 7.94dvh;
     aspect-ratio: 1;

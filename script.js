@@ -165,7 +165,7 @@ class Game2048
 
   setMenuBtnWidth()
   {
-    const menuBtns = document.querySelectorAll('.menu-btn');
+    const menuBtns = document.querySelectorAll('.menu-popup__btn');
     const board = document.querySelector('.board');
 
 

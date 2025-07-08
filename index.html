@@ -38,8 +38,10 @@
                 <span class="score">2048</span>
             </div>
         </div>
+
         <div class="board">
         </div>
+
         <div class="power-ups-container">
             <div class="undo-btn power-up">
                 <figure>
@@ -50,6 +52,7 @@
                     2
                 </div>
             </div>
+
             <div class="shuffle-btn power-up">
                 <figure>
                     <img src="assets/icons/shuffle-icon.png" alt="Shuffle Btn">
@@ -58,11 +61,12 @@
                 <div class="shuffle-btn__count power-up__count">
                     2
                 </div>
+
             </div>
 
             <div class="swap-btn power-up">
                 <figure>
-                    <img src="assets/icons/swap-icon.png" alt="Swao Btn">
+                    <img src="assets/icons/swap-icon.png" alt="Swap Btn">
                     <figcaption>Swap</figcaption>
                 </figure>
                 <div class="swap-btn__count power-up__count">
@@ -70,39 +74,73 @@
                 </div>
             </div>
         </div>
+
         <div class="new-game-btn-container">
             <button class="new-game-btn">
                 New Game
             </button>
         </div>
-        <div class="new-game-popup menu-popup">
+
+        <div class="grid-selection-popup menu-popup">
             <div class="menu-popup__title">
-                New game
+                Select Grid
             </div>
-            <button class="grid-4x4-btn menu-btn menu-btn-1">
+            <button class="grid-4x4-btn menu-popup__btn menu-popup__btn-1">
                 <img src="./assets/images/grid-4x4.png" alt="grid-4x4">
                 <span class="menu-btn__text">4 X 4</span>
             </button>
-            <button class="grid-5x5-btn menu-btn menu-btn-2">
+            <button class="grid-5x5-btn menu-popup__btn menu-popup__btn-2">
                 <img src="./assets/images/grid-5x5.png" alt="grid-5x5">
                 <span class="menu-btn__text">5 X 5</span>
             </button>
-            </div>
+        </div>
             
-            <div class="game-over-popup menu-popup" style="display: none;">
-                <div class="menu-popup__title">
+        <div class="game-over-popup menu-popup">
+            <div class="menu-popup__title">
                 Game Over
             </div>
             <div class="menu-popup__sub-title">
                 <span class="score">420</span> points score in <span class="move-count">69</span> moves
             </div>
-            <button class="retry-btn menu-btn menu-btn-1">
+            <button class="retry-btn menu-popup__btn menu-popup__btn-1">
                 Retry
             </button>
-            <button class="choose-grid-btn menu-btn menu-btn-2">
+            <button class="choose-grid-btn menu-popup__btn menu-popup__btn-2">
                 Choose Grid
             </button>
         </div>
+
+        <div class="game-won-popup menu-popup">
+            <div class="menu-popup__title">
+                Congratulations!
+            </div>
+            <div class="menu-popup__sub-title center">
+                You have won Tile Twist.<br />Would you to continue?
+            </div>
+            <button class="continue-btn menu-popup__btn menu-popup__btn-1">
+                Continue
+            </button>
+            <button class="new-game-btn menu-popup__btn menu-popup__btn-2">
+                New Game
+            </button>
+        </div>
+
+        <div class="new-game-popup menu-popup">
+            <div class="menu-popup__title">
+                New Game
+            </div>
+            <div class="menu-popup__sub-title center">
+                Are you sure you want to start a new game?
+                <br />All progress will be lost
+            </div>
+            <button class="yes-btn menu-popup__btn menu-popup__btn-1">
+                Yes
+            </button>
+            <button class="cancel-btn menu-popup__btn menu-popup__btn-2">
+                Cancel
+            </button>
+        </div>
+
     </main>
     <footer class="center">
         Created By Varun Taneja
