@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tile Twist</title>
     <link rel="stylesheet" href="./style.css">
-    <script type="module" src="./script.js" defer></script>
+    <script type="module" src="./main.js" defer></script>
     <link rel="icon" type="image/png" sizes="48x48" href="assets/icons/Tile_Twist_favicon-48x48.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/Tile_Twist_favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/Tile_Twist_favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/Tile_Twist_favicon-180x180.png">
     <link rel="mask-icon" href="assets/icons/Tile_Twist_favicon-48x48.png" color="#000000">
     <link rel="preload" href="./assets/fonts/Zilap Monograma DEMO.ttf" as="font" type="font/ttf" crossorigin="anonymous">
-    <link rel="preload" href="./assets/icons/shuffle-icon.png" as="image" type="image/png">
+    <!-- <link rel="preload" href="./assets/icons/shuffle-icon.png" as="image" type="image/png">
     <link rel="preload" href="./assets/icons/undo-icon.png" as="image" type="image/png">
-    <link rel="preload" href="./assets/icons/swap-icon.png" as="image" type="image/png">
+    <link rel="preload" href="./assets/icons/swap-icon.png" as="image" type="image/png"> -->
     <link rel="preload" href="./assets/images/grid-4x4.png" as="image" type="image/png">
     <link rel="preload" href="./assets/images/grid-5x5.png" as="image" type="image/png">
 </head>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="new-game-btn-container">
-            <button class="new-game-btn">
+            <button class="new-game-btn animated-btn">
                 New Game
             </button>
         </div>
@@ -85,11 +85,11 @@
             <div class="menu-popup__title">
                 Select Grid
             </div>
-            <button class="grid-4x4-btn menu-popup__btn menu-popup__btn-1">
+            <button class="grid-4x4-btn menu-popup__btn menu-popup__btn-1 animated-btn">
                 <img src="./assets/images/grid-4x4.png" alt="grid-4x4">
                 <span class="menu-btn__text">4 X 4</span>
             </button>
-            <button class="grid-5x5-btn menu-popup__btn menu-popup__btn-2">
+            <button class="grid-5x5-btn menu-popup__btn menu-popup__btn-2 animated-btn">
                 <img src="./assets/images/grid-5x5.png" alt="grid-5x5">
                 <span class="menu-btn__text">5 X 5</span>
             </button>
@@ -102,10 +102,10 @@
             <div class="menu-popup__sub-title">
                 <span class="score">420</span> points score in <span class="move-count">69</span> moves
             </div>
-            <button class="retry-btn menu-popup__btn menu-popup__btn-1">
+            <button class="retry-btn menu-popup__btn menu-popup__btn-1 animated-btn">
                 Retry
             </button>
-            <button class="choose-grid-btn menu-popup__btn menu-popup__btn-2">
+            <button class="choose-grid-btn menu-popup__btn menu-popup__btn-2 animated-btn">
                 Choose Grid
             </button>
         </div>
@@ -117,10 +117,10 @@
             <div class="menu-popup__sub-title center">
                 You have won Tile Twist.<br />Would you to continue?
             </div>
-            <button class="continue-btn menu-popup__btn menu-popup__btn-1">
+            <button class="continue-btn menu-popup__btn menu-popup__btn-1 animated-btn">
                 Continue
             </button>
-            <button class="new-game-btn menu-popup__btn menu-popup__btn-2">
+            <button class="new-game-btn-popup menu-popup__btn menu-popup__btn-2 animated-btn">
                 New Game
             </button>
         </div>
@@ -133,10 +133,10 @@
                 Are you sure you want to start a new game?
                 <br />All progress will be lost
             </div>
-            <button class="yes-btn menu-popup__btn menu-popup__btn-1">
+            <button class="yes-btn menu-popup__btn menu-popup__btn-1 animated-btn">
                 Yes
             </button>
-            <button class="cancel-btn menu-popup__btn menu-popup__btn-2">
+            <button class="cancel-btn menu-popup__btn menu-popup__btn-2 animated-btn">
                 Cancel
             </button>
         </div>

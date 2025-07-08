@@ -1,4 +1,4 @@
-class Game2048
+export default class Game2048
 {
 
   constructor(BOARD_SIZE)
@@ -80,7 +80,7 @@ class Game2048
     const left = (tile.col * (tileSize + padding * 2) + padding * 2) / boardSize * 100;
     const top = (tile.row * (tileSize + padding * 2) + padding * 2) / boardSize * 100;
 
-    return { left, top };
+    return {left, top};
   }
 
 
@@ -89,9 +89,15 @@ class Game2048
   {
     const board = document.querySelector('.board');
 
+
+    // Remove all tile-containers
+    const tileContainerNodeList = board.querySelectorAll('.tile-container');
+    tileContainerNodeList.forEach(item => 
+    {
+      item.remove();
+    });
+
     // * Dynamic board size ==
-    // let tileSizeMult = 4 / this.BOARD_SIZE;
-    // document.documentElement.style.setProperty("--BOARD-SIZE-MULT", tileSizeMult);
     document.documentElement.style.setProperty("--BOARD-SIZE", this.BOARD_SIZE);
 
 
@@ -280,7 +286,7 @@ class Game2048
     document.addEventListener('touchmove', function (e)
     {
       e.preventDefault();
-    }, { passive: false });
+    }, {passive: false});
 
     // Touch start
     document.body.addEventListener('touchstart', (e) =>
@@ -359,7 +365,7 @@ class Game2048
       {
         if (this.grid[r][c] === null)
         {
-          emptyCells.push({ r, c });
+          emptyCells.push({r, c});
         }
       }
     }
@@ -394,7 +400,7 @@ class Game2048
       tileElement.classList.add('tile-new');
     }
 
-    const { left, top } = this.getTileElementPosition(tile);
+    const {left, top} = this.getTileElementPosition(tile);
     tileElement.style.left = left + '%';
     tileElement.style.top = top + '%';
     tileElement.textContent = tile.value;
@@ -536,7 +542,7 @@ class Game2048
         {
 
           // merge tiles
-          const cell = { r: r, c: col };
+          const cell = {r: r, c: col};
           const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
 
           newRow[col] = mergedTile;
@@ -619,7 +625,7 @@ class Game2048
         if (i > 0 && tile.value === row[i - 1].value)
         {
           // merge tiles
-          const cell = { r: r, c: col };
+          const cell = {r: r, c: col};
           const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
 
           newRow[col] = mergedTile;
@@ -698,7 +704,7 @@ class Game2048
         if (i < col.length - 1 && col[i + 1].value === tile.value)
         {
           // merge tiles
-          const cell = { r: row, c: c };
+          const cell = {r: row, c: c};
           const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
 
           newCol[row] = mergedTile;
@@ -783,7 +789,7 @@ class Game2048
         if (i > 0 && col[i - 1].value === tile.value)
         {
           // merge tiles
-          const cell = { r: row, c: c };
+          const cell = {r: row, c: c};
           const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
 
           newCol[row] = mergedTile;
@@ -929,7 +935,7 @@ class Game2048
         // calculate the position
         const leftInitial = parseFloat(tileElement.style.left);
         const topInitial = parseFloat(tileElement.style.top);
-        const { left, top } = this.getTileElementPosition(tile);
+        const {left, top} = this.getTileElementPosition(tile);
 
         const offsetMult = 0.05;
 
@@ -949,8 +955,8 @@ class Game2048
         // set position after animation is complete
         animation.finished.then(() =>
         {
-          tileElement.style.left = `${left}px`;
-          tileElement.style.top = `${top}px`;
+          tileElement.style.left = `${left}%`;
+          tileElement.style.top = `${top}%`;
         });
 
 
@@ -1016,7 +1022,7 @@ class Game2048
   deepCopyGrid()
   {
     return this.grid.map(row =>
-      row.map(tile => tile ? { ...tile } : null)
+      row.map(tile => tile ? {...tile} : null)
     );
   }
 
@@ -1026,7 +1032,7 @@ class Game2048
     const tilesCopy = new Map();
     this.tiles.forEach((tile, id) =>
     {
-      tilesCopy.set(id, { ...tile });
+      tilesCopy.set(id, {...tile});
     });
     return tilesCopy;
   }
@@ -1120,8 +1126,8 @@ class Game2048
         if (tileElement)
         {
           const currentTile = currentTiles.get(id);
-          const { left: newLeft, top: newTop } = this.getTileElementPosition(tile);
-          const { left: oldLeft, top: oldTop } = this.getTileElementPosition(currentTile);
+          const {left: newLeft, top: newTop} = this.getTileElementPosition(tile);
+          const {left: oldLeft, top: oldTop} = this.getTileElementPosition(currentTile);
 
           // Update tile value and class if it changed
           if (tile.value !== currentTile.value)
@@ -1232,12 +1238,6 @@ class Game2048
 
 }
 
-let BOARD_SIZE = 4;
-const game = new Game2048(BOARD_SIZE);
-const newGameBtn = document.querySelector('.new-game-btn');
 
-newGameBtn.addEventListener('click', (e) =>
-{
-  game.init(BOARD_SIZE);
-});
+
 
