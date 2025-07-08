@@ -79,6 +79,26 @@ function setupEventListeners()
         }
     });
 
+    // new game popup
+    popupNewGame.addEventListener('click', (e) => 
+    {
+        setNewBtnState(false);
+
+        // to prevent closing the menu if button is not clicked
+        if (e.target.closest('.menu-popup__btn'))
+        {
+            hidePopup(popupNewGame);
+            setNewBtnState(true);
+        }
+
+        if (e.target.closest('.yes-btn'))
+        {
+            showPopup(popupGridSelection);
+            setNewBtnState(false);
+        }
+    });
+
+
     // new game btn
     btnNewGame.addEventListener('click', () =>
     {
