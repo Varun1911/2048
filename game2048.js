@@ -236,6 +236,14 @@ export default class Game2048
     this.tiles.clear();
     this.tilesToRemove = [];
 
+    // reset event listener variables
+    this.keyDownListener = null;
+    this.undoBtnListener = null;
+    this.shuffleBtnListener = null;
+    this.touchMoveListener = null;
+    this.touchStartListener = null;
+    this.touchEndListener = null;
+
     // Clear undo history on new game
     this.gameStates = [];
     this.undoRemaining = 2;
