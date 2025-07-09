@@ -1,65 +1,37 @@
 import Game2048 from "./game2048.js";
+import {showPopup, hidePopup, allowNewBtnClick} from "./helper.js";
 
 // dom elements
 const popupGridSelection = document.querySelector('.grid-selection-popup');
 const popupGameOver = document.querySelector('.game-over-popup');
 const popupGameWon = document.querySelector('.game-won-popup');
 const popupNewGame = document.querySelector('.new-game-popup');
-const btnRetry = popupGameOver.querySelector('.menu-popup__btn-1');
-const btnChooseGrid = popupGameOver.querySelector('.menu-popup__btn-2');
-const btnContinue = popupGameWon.querySelector('.menu-popup__btn-1');
-const btnNewGamePopup = popupGameWon.querySelector('.menu-popup__btn-2');
-const btnYes = popupNewGame.querySelector('.menu-popup__btn-1');
-const btnCancel = popupNewGame.querySelector('.menu-popup__btn-2');
 const btnNewGame = document.querySelector('.new-game-btn');
 
 
 //variables
 let game;
 let board_size;
-let allowNewBtnClick;
 
 //helper functions
-function showPopup(popup)
+function startGame(size)
 {
-    popup.classList.add('show-menu-popup');
-}
-
-function hidePopup(popup)
-{
-    popup.classList.remove('show-menu-popup');
-    popup.classList.add('hide-menu-popup');
-
-    popup.addEventListener('animationend', () =>
+    board_size = size;
+    if (game)
     {
-        popup.classList.remove('hide-menu-popup');
-    }, {once: true});
-}
-
-
-function setNewBtnState(state)
-{
-    if (state)
-    {
-        btnNewGame.style.opacity = 1;
+        game.dispose();
+        game = null;
     }
-
-    else
-    {
-        btnNewGame.style.opacity = 0.8;
-    }
-
-    allowNewBtnClick = state;
+    game = new Game2048(size);
 }
+
 
 // main functions
 function setupEventListeners()
 {
-
     // grid selection popup
     popupGridSelection.addEventListener('click', (e) => 
     {
-        setNewBtnState(false);
 
         if (e.target.closest('.grid-4x4-btn'))
         {
@@ -75,26 +47,58 @@ function setupEventListeners()
         if (e.target.closest('.menu-popup__btn'))
         {
             hidePopup(popupGridSelection);
-            setNewBtnState(true);
         }
     });
 
     // new game popup
     popupNewGame.addEventListener('click', (e) => 
     {
-        setNewBtnState(false);
-
         // to prevent closing the menu if button is not clicked
         if (e.target.closest('.menu-popup__btn'))
         {
             hidePopup(popupNewGame);
-            setNewBtnState(true);
         }
 
         if (e.target.closest('.yes-btn'))
         {
             showPopup(popupGridSelection);
-            setNewBtnState(false);
+        }
+    });
+
+    //game won popup
+    popupGameWon.addEventListener('click', (e) => 
+    {
+
+        // to prevent closing the menu if button is not clicked
+        if (e.target.closest('.menu-popup__btn'))
+        {
+            hidePopup(popupGameWon);
+        }
+
+        if (e.target.closest('.new-game-btn-popup'))
+        {
+            showPopup(popupGridSelection);
+        }
+    });
+
+    //game over popup
+    popupGameOver.addEventListener('click', (e) => 
+    {
+
+        // to prevent closing the menu if button is not clicked
+        if (e.target.closest('.menu-popup__btn'))
+        {
+            hidePopup(popupGameOver);
+        }
+
+        if (e.target.closest('.retry-btn'))
+        {
+            startGame(board_size);
+        }
+
+        else if (e.target.closest('.choose-grid-btn'))
+        {
+            showPopup(popupGridSelection);
         }
     });
 
@@ -110,21 +114,9 @@ function setupEventListeners()
 }
 
 
-function startGame(size)
-{
-    board_size = size;
-    if (game)
-    {
-        game.dispose();
-        game = null;
-    }
-    game = new Game2048(size);
-}
-
 ; (() =>
 {
     startGame(4);
-    setNewBtnState(false);
     setupEventListeners();
     showPopup(popupGridSelection);
 })();

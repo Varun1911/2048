@@ -1,3 +1,8 @@
+import {showPopup, isPopupOpened} from "./helper.js";
+
+const popupGameOver = document.querySelector('.game-over-popup');
+const popupGameWon = document.querySelector('.game-won-popup');
+
 export default class Game2048
 {
 
@@ -70,6 +75,11 @@ export default class Game2048
 
   getRandomNumber()
   {
+    //*for testing
+    // return Math.random() < 0.9 ? 1024 : 512;
+    // let arr = [2, 4, 8, 16, 32, 64, 128, 256, 512];
+    // return arr[Math.floor(Math.random() * arr.length)];
+
     return Math.random() < 0.9 ? 2 : 4;
   }
 
@@ -1005,13 +1015,13 @@ export default class Game2048
 
   showGameWon()
   {
-    alert("You Win");
+    showPopup(popupGameWon);
   }
 
 
   showGameOver()
   {
-    alert("Game Over");
+    showPopup(popupGameOver);
   }
 
 
