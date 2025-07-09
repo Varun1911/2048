@@ -58,12 +58,18 @@
     transition: transform 0.1s;
 }
 
+
 .animated-btn:active
 {
     transform: scale(95%);
 }
 
-body {
+/* to hide everything initially */
+body.preload>*{
+  display: none;
+}
+
+body  {
     min-height: 100dvh;
     max-height: 100dvh;
     background-color: var(--BGCOLOR);
@@ -72,6 +78,21 @@ body {
     font-family: var(--FF);
 }
 
+/* to show the loader */
+.loader {
+    height: 100dvh;
+    width: 100dvw;
+    margin: auto;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+svg {
+    background: transparent;
+    height: 40dvh;
+    width: 40dvh;
+}
 
 header {
     display: grid;

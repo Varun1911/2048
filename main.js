@@ -113,10 +113,15 @@ function setupEventListeners()
     })
 }
 
-
-; (() =>
+document.addEventListener("DOMContentLoaded", () =>
 {
-    startGame(4);
-    setupEventListeners();
-    showPopup(popupGridSelection);
-})();
+    // to play the loader for min 1.5s
+    setTimeout(() =>
+    {
+        document.body.classList.remove("preload");
+        document.querySelector('.loader').remove()
+        startGame(4);
+        setupEventListeners();
+        showPopup(popupGridSelection);
+    }, 1500)
+})
