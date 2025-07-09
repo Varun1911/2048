@@ -119,17 +119,18 @@ main {
 
     padding: 0 1.41dvh;
     height: 4.47dvh;
-    border-radius: var(--BOARD-BORDER-RADIUS);
 }
 
 
 .current-score-container {
     background-color: var(--COLOR-GREEN-DARK);
+    border-radius: var(--BOARD-BORDER-RADIUS) 0 0 var(--BOARD-BORDER-RADIUS);
 }
 
 
 .best-score-container {
     background: var(--COLOR-GREEN);
+    border-radius: 0 var(--BOARD-BORDER-RADIUS) var(--BOARD-BORDER-RADIUS) 0;
 }
 
 
