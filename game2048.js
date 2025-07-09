@@ -61,6 +61,11 @@ export default class Game2048
   }
 
   // Helper functions
+  isInputAllowed()
+  {
+    return this.allowInput && !isPopupOpened;
+  }
+
   getBestScoreFromStorage()
   {
     return parseInt(localStorage.getItem(`best2048_${this.BOARD_SIZE}`) || '0')
@@ -456,7 +461,7 @@ export default class Game2048
 
   move(direction)
   {
-    if (!this.allowInput)
+    if (!this.isInputAllowed())
     {
       return;
     }
@@ -1072,7 +1077,7 @@ export default class Game2048
 
   undo()
   {
-    if (!this.canUndo || this.gameStates.length === 0 || !this.allowInput)
+    if (!this.canUndo || this.gameStates.length === 0 || !this.isInputAllowed())
     {
       return;
     }
