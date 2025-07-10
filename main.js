@@ -1,5 +1,5 @@
 import Game2048 from "./game2048.js";
-import { showPopup, hidePopup, allowNewBtnClick } from "./helper.js";
+import { showPopup, hidePopup } from "./helper.js";
 
 // dom elements
 const popupGridSelection = document.querySelector('.grid-selection-popup');
@@ -106,27 +106,14 @@ function setupEventListeners()
     // new game btn
     btnNewGame.addEventListener('click', () =>
     {
-        if (allowNewBtnClick)
-        {
-            showPopup(popupNewGame);
-        }
+        showPopup(popupNewGame);
     })
 }
 
 document.addEventListener("DOMContentLoaded", () =>
 {
     document.body.classList.remove("preload");
-    // document.querySelector('.loader').remove();
     startGame(4);
     setupEventListeners();
     showPopup(popupGridSelection);
-    // to play the loader for min 1.5s
-    // setTimeout(() =>
-    // {
-    //     document.body.classList.remove("preload");
-    //     // document.querySelector('.loader').remove();
-    //     startGame(4);
-    //     setupEventListeners();
-    //     showPopup(popupGridSelection);
-    // }, 1000);
 })
