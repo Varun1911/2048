@@ -1,4 +1,3 @@
-const btnNewGame = document.querySelector('.new-game-btn');
 const bgBlur = document.querySelector('.bg-blur');
 let isPopupOpened = true;
 

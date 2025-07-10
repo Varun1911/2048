@@ -1,4 +1,4 @@
-import {showPopup, isPopupOpened} from "./helper.js";
+import { showPopup, isPopupOpened } from "./helper.js";
 
 const popupGameOver = document.querySelector('.game-over-popup');
 const popupGameWon = document.querySelector('.game-won-popup');
@@ -21,6 +21,8 @@ export default class Game2048
     this.animationTimeMove = 150;
     // Store tiles that need to be animated and then removed
     this.tilesToRemove = [];
+    // total number of moves in the game
+    this.moveCount = 0;
 
     // Undo functionality
     this.gameStates = []; // Stack to store previous game states
@@ -57,7 +59,7 @@ export default class Game2048
     const undoBtn = document.querySelector('.undo-btn');
     const shuffleBtn = document.querySelector('.shuffle-btn');
     if (undoBtn) undoBtn.removeEventListener('click', this.undoClickListener);
-    if (shuffleBtn) shuffleBtn.removeEventListener('click', this.shuffleClickListener);
+    if (shuffleBtn) shuffleBtn.removeEventListener('click', this.shuffleBtnListener);
   }
 
   // Helper functions
@@ -117,7 +119,7 @@ export default class Game2048
     const left = (tile.col * (tileSize + padding * 2) + padding * 2) / boardSize * 100;
     const top = (tile.row * (tileSize + padding * 2) + padding * 2) / boardSize * 100;
 
-    return {left, top};
+    return { left, top };
   }
 
 
@@ -127,7 +129,7 @@ export default class Game2048
     const board = document.querySelector('.board');
 
 
-    // Remove all tile-containers
+    // Remove all previous tile-containers
     const tileContainerNodeList = board.querySelectorAll('.tile-container');
     tileContainerNodeList.forEach(item => 
     {
@@ -235,6 +237,7 @@ export default class Game2048
     this.tileId = 0;
     this.tiles.clear();
     this.tilesToRemove = [];
+    this.moveCount = 0;
 
     // reset event listener variables
     this.keyDownListener = null;
@@ -331,7 +334,7 @@ export default class Game2048
     document.addEventListener('touchmove', this.touchMoveListener = function (e)
     {
       e.preventDefault();
-    }, {passive: false});
+    }, { passive: false });
 
     // Touch start
     document.body.addEventListener('touchstart', this.touchStartListener = (e) =>
@@ -410,7 +413,7 @@ export default class Game2048
       {
         if (this.grid[r][c] === null)
         {
-          emptyCells.push({r, c});
+          emptyCells.push({ r, c });
         }
       }
     }
@@ -445,7 +448,7 @@ export default class Game2048
       tileElement.classList.add('tile-new');
     }
 
-    const {left, top} = this.getTileElementPosition(tile);
+    const { left, top } = this.getTileElementPosition(tile);
     tileElement.style.left = left + '%';
     tileElement.style.top = top + '%';
     tileElement.textContent = tile.value;
@@ -481,7 +484,6 @@ export default class Game2048
     // Save current state before making a move
     this.saveGameState();
 
-
     switch (direction)
     {
       case 'left':
@@ -502,6 +504,8 @@ export default class Game2048
 
     if (moved)
     {
+      this.moveCount++;
+
       //disallow input during animation
       this.allowInput = false;
 
@@ -568,7 +572,7 @@ export default class Game2048
   }
 
 
-  moveLeft()
+  moveLeft()  
   {
     let moved = false;
 
@@ -587,7 +591,7 @@ export default class Game2048
         {
 
           // merge tiles
-          const cell = {r: r, c: col};
+          const cell = { r: r, c: col };
           const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
 
           newRow[col] = mergedTile;
@@ -595,24 +599,24 @@ export default class Game2048
           this.score += mergedTile.value;
 
           // Mark the merged tile for removal AFTER animation
-          const mergedTileId = row[i + 1].id;
-          this.tilesToRemove.push(mergedTileId);
+          const tileToRemoveId = row[i + 1].id;
+          this.tilesToRemove.push(tileToRemoveId);
 
-          // Update the merged tile's position for animation
-          const mergedTileToAnimate = this.tiles.get(mergedTileId);
-          if (mergedTileToAnimate)
+          // Update the removed tile's position for animation
+          const tileToRemove = this.tiles.get(tileToRemoveId);
+          if (tileToRemove)
           {
-            mergedTileToAnimate.row = r;
-            mergedTileToAnimate.col = col;
+            tileToRemove.row = r;
+            tileToRemove.col = col;
           }
 
           // move the z-index back
-          const mergedTileElement = document.querySelector(`#tile-${mergedTileId}`);
+          const tileToRemoveElement = document.querySelector(`#tile-${tileToRemoveId}`);
 
-          if (mergedTileElement)
+          if (tileToRemoveElement)
           {
             // initially it is 1
-            mergedTileElement.style.zIndex = 0;
+            tileToRemoveElement.style.zIndex = 0;
           }
 
           // skip the next tile as it is merged
@@ -670,7 +674,7 @@ export default class Game2048
         if (i > 0 && tile.value === row[i - 1].value)
         {
           // merge tiles
-          const cell = {r: r, c: col};
+          const cell = { r: r, c: col };
           const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
 
           newRow[col] = mergedTile;
@@ -749,7 +753,7 @@ export default class Game2048
         if (i < col.length - 1 && col[i + 1].value === tile.value)
         {
           // merge tiles
-          const cell = {r: row, c: c};
+          const cell = { r: row, c: c };
           const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
 
           newCol[row] = mergedTile;
@@ -834,7 +838,7 @@ export default class Game2048
         if (i > 0 && col[i - 1].value === tile.value)
         {
           // merge tiles
-          const cell = {r: row, c: c};
+          const cell = { r: row, c: c };
           const mergedTile = this.createTile(tile.id, cell, tile.value * 2, false, true);
 
           newCol[row] = mergedTile;
@@ -980,7 +984,7 @@ export default class Game2048
         // calculate the position
         const leftInitial = parseFloat(tileElement.style.left);
         const topInitial = parseFloat(tileElement.style.top);
-        const {left, top} = this.getTileElementPosition(tile);
+        const { left, top } = this.getTileElementPosition(tile);
 
         const offsetMult = 0.05;
 
@@ -1034,6 +1038,10 @@ export default class Game2048
 
   showGameOver()
   {
+    const popupScore = popupGameOver.querySelector('.score');
+    const popupMoveCount = popupGameOver.querySelector('.move-count');
+    popupScore.textContent = this.score;
+    popupMoveCount.textContent = this.moveCount;
     showPopup(popupGameOver);
   }
 
@@ -1067,7 +1075,7 @@ export default class Game2048
   deepCopyGrid()
   {
     return this.grid.map(row =>
-      row.map(tile => tile ? {...tile} : null)
+      row.map(tile => tile ? { ...tile } : null)
     );
   }
 
@@ -1077,7 +1085,7 @@ export default class Game2048
     const tilesCopy = new Map();
     this.tiles.forEach((tile, id) =>
     {
-      tilesCopy.set(id, {...tile});
+      tilesCopy.set(id, { ...tile });
     });
     return tilesCopy;
   }
@@ -1090,6 +1098,7 @@ export default class Game2048
       return;
     }
 
+    this.moveCount--;
     this.undoRemaining--;
     this.allowInput = false;
 
@@ -1171,8 +1180,8 @@ export default class Game2048
         if (tileElement)
         {
           const currentTile = currentTiles.get(id);
-          const {left: newLeft, top: newTop} = this.getTileElementPosition(tile);
-          const {left: oldLeft, top: oldTop} = this.getTileElementPosition(currentTile);
+          const { left: newLeft, top: newTop } = this.getTileElementPosition(tile);
+          const { left: oldLeft, top: oldTop } = this.getTileElementPosition(currentTile);
 
           // Update tile value and class if it changed
           if (tile.value !== currentTile.value)
@@ -1230,6 +1239,12 @@ export default class Game2048
 
   shuffleTiles()
   {
+
+    this.saveGameState();
+
+    console.log(this);
+    this.moveCount++;
+
     // array of all empty spots
     let emptySpots = Array(this.BOARD_SIZE * this.BOARD_SIZE).fill().map((_, idx) => idx);
 
