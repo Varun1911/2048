@@ -150,6 +150,19 @@ main {
 }
 
 
+.swap-popup
+{
+    background-color: gray;
+    position: absolute;
+    height: 5dvh;
+    width: 20dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+}
+
+
 .power-ups-container {
     display: flex;
     justify-content: space-around;

@@ -35,10 +35,16 @@ export default class Game2048
     this.maxShuffleCount = 2;
     this.shuffleRemaining = this.maxShuffleCount;
 
+    // Swap Functionality 
+    this.maxSwapCount = 2;
+    this.swapRemaining = this.maxSwapCount;
+    this.isSwaping = false;
+
     // to dispose event listeners
     this.keyDownListener;
     this.undoBtnListener;
     this.shuffleBtnListener;
+    this.swapBtnListener;
     this.touchMoveListener;
     this.touchStartListener;
     this.touchEndListener;
@@ -59,8 +65,10 @@ export default class Game2048
     // Remove button listeners
     const undoBtn = document.querySelector('.undo-btn');
     const shuffleBtn = document.querySelector('.shuffle-btn');
+    const swapBtn = document.querySelector('.swap-btn');
     if (undoBtn) undoBtn.removeEventListener('click', this.undoClickListener);
     if (shuffleBtn) shuffleBtn.removeEventListener('click', this.shuffleBtnListener);
+    if (swapBtn) swapBtn.removeEventListener('click', this.swapBtnListener);
   }
 
   // Helper functions
@@ -235,6 +243,7 @@ export default class Game2048
     this.keyDownListener = null;
     this.undoBtnListener = null;
     this.shuffleBtnListener = null;
+    this.swapBtnListener = null;
     this.touchMoveListener = null;
     this.touchStartListener = null;
     this.touchEndListener = null;
@@ -248,6 +257,11 @@ export default class Game2048
     // reset shuffle count
     this.shuffleRemaining = this.maxShuffleCount;
     this.updateShuffleButton();
+
+    //reset swap 
+    this.swapRemaining = this.maxSwapCount;
+    this.updateSwapButton();
+    this.isSwaping = false;
 
     //remove existing tiles
     const existingTiles = board.querySelectorAll('.tile');
@@ -313,6 +327,17 @@ export default class Game2048
       shuffleBtn.addEventListener('click', this.shuffleBtnListener = () =>
       {
         this.shuffleTiles();
+      })
+    }
+
+
+    const swapBtn = document.querySelector('.swap-btn');
+
+    if (swapBtn)
+    {
+      swapBtn.addEventListener('click', this.swapBtnListener = () =>
+      {
+        this.swapTiles();
       })
     }
   }
@@ -1228,10 +1253,13 @@ export default class Game2048
 
   shuffleTiles()
   {
+    if (!this.shuffleRemaining > 0)
+    {
+      return;
+    }
 
     this.saveGameState();
 
-    console.log(this);
     this.moveCount++;
 
     // array of all empty spots
@@ -1285,6 +1313,65 @@ export default class Game2048
   // * Swap Powerup
 
 
+  swapTiles()
+  {
+    if (!this.swapRemaining > 0 || this.isSwaping)
+    {
+      return;
+    }
+
+    this.enterSwapMode();
+
+    this.swapRemaining--;
+    this.updateSwapButton();
+  }
+
+  updateSwapButton()
+  {
+    const swapBtn = document.querySelector('.swap-btn');
+    const swapBtnCount = swapBtn.querySelector('.swap-btn__count');
+
+    if (swapBtn)
+    {
+      swapBtn.disabled = !(this.swapRemaining > 0);
+      swapBtn.style.opacity = this.swapRemaining > 0 ? '1' : '0.5';
+    }
+
+    if (swapBtnCount)
+    {
+      swapBtnCount.textContent = this.swapRemaining;
+    }
+  }
+
+
+  enterSwapMode()
+  {
+    this.isSwaping = true;
+
+    // show popup and hide score wrapper 
+    const swapPopup = document.querySelector('.swap-popup');
+    swapPopup.style.visibility = 'visible';
+    const scoreWrapper = document.querySelector('.score-wrapper');
+    scoreWrapper.style.visibility = 'hidden';
+
+    // visual changes
+    this.tiles.forEach(tile =>
+    {
+      const tileElement = board.querySelector(`#tile-${tile.id}`);
+      console.log(tileElement);
+    })
+  }
+
+  exitSwapMode()
+  {
+    this.isSwaping = false;
+
+    // remove popup and show score wrapper 
+    const swapPopup = document.querySelector('.swap-popup');
+    swapPopup.style.visibility = 'hidden';
+    const scoreWrapper = document.querySelector('.score-wrapper');
+    scoreWrapper.style.visibility = 'visible';
+  }
 }
 
 
