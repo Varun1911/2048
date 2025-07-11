@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
-/* @import url("https://use.typekit.net/uwj5uaa.css"); */
-
 @font-face {
     font-family: Zilap-Monograma;
     src: url(./assets/fonts/Zilap\ Monograma\ DEMO.ttf);
@@ -80,21 +78,6 @@ body {
     font-family: var(--FF);
 }
 
-/* to show the loader
-.loader {
-    height: 100dvh;
-    width: 100dvw;
-    margin: auto;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-}
-
-svg {
-    background: transparent;
-    height: 40dvh;
-    width: 40dvh;
-} */
 
 header {
     display: grid;
@@ -254,7 +237,7 @@ main {
     display: flex;
     align-items: center;
     flex-flow: column wrap;
-    z-index: 5;
+    z-index: 10;
 
     transform: scale(0) translate(-50%, -50%);
     transform-origin: 0%;
@@ -364,6 +347,7 @@ main {
     height: 100%;
     position: absolute;
     background-color: #FBFFED42;
+    z-index: 5;
 }
 
 .board {

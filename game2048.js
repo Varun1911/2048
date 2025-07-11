@@ -2,6 +2,7 @@ import { showPopup, isPopupOpened } from "./helper.js";
 
 const popupGameOver = document.querySelector('.game-over-popup');
 const popupGameWon = document.querySelector('.game-won-popup');
+const board = document.querySelector('.board');
 
 export default class Game2048
 {
@@ -109,7 +110,6 @@ export default class Game2048
   getTileElementPosition(tile)
   {
     // const root = document.documentElement;
-    const board = document.querySelector('.board');
     const padding = parseFloat(getComputedStyle(board).padding);
 
     const tileContainer = document.querySelector('.tile-container');
@@ -126,8 +126,6 @@ export default class Game2048
   // Main functions
   createBoardUI(size)
   {
-    const board = document.querySelector('.board');
-
 
     // Remove all previous tile-containers
     const tileContainerNodeList = board.querySelectorAll('.tile-container');
@@ -167,7 +165,6 @@ export default class Game2048
   setScoreContainerWidth()
   {
     const scoreWrapper = document.querySelector('.score-wrapper');
-    const board = document.querySelector('.board');
 
     let width = board.getBoundingClientRect().width;
 
@@ -181,7 +178,6 @@ export default class Game2048
   setPowerUpContainerWidth()
   {
     const powerUpContainer = document.querySelector('.power-ups-container');
-    const board = document.querySelector('.board');
 
     let width = board.getBoundingClientRect().width;
 
@@ -195,8 +191,6 @@ export default class Game2048
   setNewGameBtnWidth()
   {
     const btnContainer = document.querySelector('.new-game-btn-container');
-    const board = document.querySelector('.board');
-
 
     let width = board.getBoundingClientRect().width;
 
@@ -211,8 +205,6 @@ export default class Game2048
   setMenuBtnWidth()
   {
     const menuBtns = document.querySelectorAll('.menu-popup__btn');
-    const board = document.querySelector('.board');
-
 
     let width = board.getBoundingClientRect().width;
 
@@ -258,7 +250,6 @@ export default class Game2048
     this.updateShuffleButton();
 
     //remove existing tiles
-    const board = document.querySelector('.board');
     const existingTiles = board.querySelectorAll('.tile');
     existingTiles.forEach(item => item.remove());
 
@@ -437,8 +428,6 @@ export default class Game2048
 
   createTileElement(tile, isUndoAnimation = false)
   {
-    const board = document.querySelector('.board');
-
     const tileElement = document.createElement('div');
     tileElement.id = `tile-${tile.id}`;
     tileElement.className = `tile tile-${tile.value}`;
