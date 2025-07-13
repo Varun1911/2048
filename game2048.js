@@ -5,8 +5,8 @@ const popupGameWon = document.querySelector('.game-won-popup');
 const board = document.querySelector('.board');
 const swapPopup = document.querySelector('.swap-popup');
 const swapPopupCancelBtn = swapPopup.querySelector('.swap-popup__cancel-btn');
-const swapPopupMoveAmount = '-4dvh';
-const swapPopupTop = '-1dvh';
+const swapPopupMoveAmount = '-1dvh';
+const swapPopupTop = '2dvh';
 
 
 export default class Game2048

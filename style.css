@@ -101,7 +101,7 @@ main {
     justify-content: center;
     align-content: start;
     justify-items: center;
-    margin-top: 6.54dvh;
+    margin-top: 3.54dvh;
     position: relative;
 }
 
@@ -111,6 +111,7 @@ main {
     display: flex;
     gap: 0.647dvh;
     justify-content: center;
+    margin-top: 3dvh;
 }
 
 
@@ -157,7 +158,6 @@ main {
     gap: 0.763dvh;
     visibility: hidden;
     transition: top 0.1s ease-out;
-    top: 3dvh;
     font-family: var(--FF);
     color: #F5F5F5;
 }
@@ -273,7 +273,7 @@ main {
     box-shadow: 0 0.418dvh 1.46dvh 0.523dvh #000;
     padding: 1.88dvh 2.61dvh 2.61dvh;
     position: absolute;
-    top: 40%;
+    top: 43%;
     left: 50%;
 
     display: flex;
