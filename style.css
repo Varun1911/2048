@@ -150,18 +150,47 @@ main {
 }
 
 
-.swap-popup
-{
-    background-color: gray;
+.swap-popup {
     position: absolute;
-    height: 5dvh;
-    width: 20dvh;
+    height: 7.85dvh;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    gap: 0.763dvh;
     visibility: hidden;
+    transition: top 0.1s ease-out;
+    top: 3dvh;
+    font-family: var(--FF);
+    color: #F5F5F5;
 }
 
+.swap-popup__text {
+    background-color: #A65040;
+    width: 75.75%;
+    height: 100%;
+    border-radius: var(--BOARD-BORDER-RADIUS) 0 0 var(--BOARD-BORDER-RADIUS);
+    font-size: 1.744dvh;
+
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.54dvh;
+}
+
+.swap-popup__text .heading {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.swap-popup__cancel-btn {
+    background-color: var(--COLOR-ORANGE);
+    width: 31%;
+    height: 100%;
+    border-radius: 0 var(--BOARD-BORDER-RADIUS) var(--BOARD-BORDER-RADIUS) 0;
+    font-size: 2.18dvh;
+    font-weight: bold;
+    display: grid;
+    place-content: center;
+}
 
 .power-ups-container {
     display: flex;
@@ -407,8 +436,24 @@ main {
 
     background-color: #184D6E;
     color: #E9FFDB;
+    overflow: hidden;
+
+    transition: transform 0.1s ease;
 }
 
+
+.tile-blur {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(175, 175, 175, 0.452);
+    visibility: hidden;
+}
+
+
+.tile-blur:hover {
+    background-color: transparent;
+}
 
 .tile-new {
     animation: appear var(--ANIMATION-TIME-SPAWN) ease-in-out;

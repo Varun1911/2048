@@ -3,6 +3,11 @@ import { showPopup, isPopupOpened } from "./helper.js";
 const popupGameOver = document.querySelector('.game-over-popup');
 const popupGameWon = document.querySelector('.game-won-popup');
 const board = document.querySelector('.board');
+const swapPopup = document.querySelector('.swap-popup');
+const swapPopupCancelBtn = swapPopup.querySelector('.swap-popup__cancel-btn');
+const swapPopupMoveAmount = '-4dvh';
+const swapPopupTop = '-1dvh';
+
 
 export default class Game2048
 {
@@ -39,12 +44,18 @@ export default class Game2048
     this.maxSwapCount = 2;
     this.swapRemaining = this.maxSwapCount;
     this.isSwaping = false;
+    this.firstTile_Swap = null;
+    this.secondTile_Swap = null;
 
     // to dispose event listeners
     this.keyDownListener;
     this.undoBtnListener;
     this.shuffleBtnListener;
     this.swapBtnListener;
+    this.swapPopupChangeListener;
+    this.swapPopupCancelListener;
+    this.swapPopupDisapperListener;
+    this.tileEventListeners = new Map();
     this.touchMoveListener;
     this.touchStartListener;
     this.touchEndListener;
@@ -69,6 +80,12 @@ export default class Game2048
     if (undoBtn) undoBtn.removeEventListener('click', this.undoClickListener);
     if (shuffleBtn) shuffleBtn.removeEventListener('click', this.shuffleBtnListener);
     if (swapBtn) swapBtn.removeEventListener('click', this.swapBtnListener);
+    if (swapPopup) 
+    {
+      swapPopup.removeEventListener('transitionend', this.swapPopupChangeListener);
+      swapPopup.removeEventListener('transitionend', this.swapPopupDisapperListener);
+    }
+    if (swapPopupCancelBtn) swapPopupCancelBtn.removeEventListener('click', this.swapPopupCancelListener);
   }
 
   // Helper functions
@@ -131,45 +148,6 @@ export default class Game2048
   }
 
 
-  // Main functions
-  createBoardUI(size)
-  {
-
-    // Remove all previous tile-containers
-    const tileContainerNodeList = board.querySelectorAll('.tile-container');
-    tileContainerNodeList.forEach(item => 
-    {
-      item.remove();
-    });
-
-    // * Dynamic board size ==
-    document.documentElement.style.setProperty("--BOARD-SIZE", this.BOARD_SIZE);
-
-
-    //grid templates
-    board.style.gridTemplateColumns = `repeat(${size}, calc(var(--TILE-SIZE) + var(--PADDING-BOARD) * 2))`;
-    board.style.gridTemplateRows = `repeat(${size}, calc(var(--TILE-SIZE) + var(--PADDING-BOARD) * 2))`;
-
-
-    for (let i = 0; i < size; i++)
-    {
-      for (let j = 0; j < size; j++)
-      {
-        const tile = document.createElement('div');
-        tile.className = `tile-container inner-shadow`;
-        tile.setAttribute('data-row', i);
-        tile.setAttribute('data-col', j);
-        board.appendChild(tile);
-      }
-    }
-
-    this.setScoreContainerWidth();
-    this.setPowerUpContainerWidth();
-    this.setNewGameBtnWidth();
-    this.setMenuBtnWidth();
-  }
-
-
   setScoreContainerWidth()
   {
     const scoreWrapper = document.querySelector('.score-wrapper');
@@ -228,6 +206,85 @@ export default class Game2048
   }
 
 
+  setSwapPopupWidth()
+  {
+    let width = board.getBoundingClientRect().width;
+
+
+    if (board && swapPopup)
+    {
+      swapPopup.style.width = `${(width * 0.75) / window.innerHeight * 100}dvh`;
+    }
+  }
+
+
+  animateTile(tileElement, leftInitialPos, leftFinalPos, topInitialPos, topFinalPos)
+  {
+    const offsetMult = 0.05;
+
+    //animate the element
+    const animation = tileElement.animate(
+      {
+        left: [`${leftInitialPos}%`, `${leftFinalPos + (leftFinalPos - leftInitialPos) * offsetMult}%`, `${leftFinalPos}%`],
+        top: [`${topInitialPos}%`, `${topFinalPos + (topFinalPos - topInitialPos) * offsetMult}%`, `${topFinalPos}%`],
+        offset: [0, 0.8, 1]
+      },
+      {
+        duration: this.animationTimeMove,
+        fill: "forwards",
+        easing: "ease-out"
+      });
+
+    // set position after animation is complete
+    animation.finished.then(() =>
+    {
+      tileElement.style.left = `${leftFinalPos}%`;
+      tileElement.style.top = `${topFinalPos}%`;
+    });
+
+    return animation;
+  }
+
+  // Main functions
+  createBoardUI(size)
+  {
+
+    // Remove all previous tile-containers
+    const tileContainerNodeList = board.querySelectorAll('.tile-container');
+    tileContainerNodeList.forEach(item => 
+    {
+      item.remove();
+    });
+
+    // * Dynamic board size ==
+    document.documentElement.style.setProperty("--BOARD-SIZE", this.BOARD_SIZE);
+
+
+    //grid templates
+    board.style.gridTemplateColumns = `repeat(${size}, calc(var(--TILE-SIZE) + var(--PADDING-BOARD) * 2))`;
+    board.style.gridTemplateRows = `repeat(${size}, calc(var(--TILE-SIZE) + var(--PADDING-BOARD) * 2))`;
+
+
+    for (let i = 0; i < size; i++)
+    {
+      for (let j = 0; j < size; j++)
+      {
+        const tile = document.createElement('div');
+        tile.className = `tile-container inner-shadow`;
+        tile.setAttribute('data-row', i);
+        tile.setAttribute('data-col', j);
+        board.appendChild(tile);
+      }
+    }
+
+    this.setScoreContainerWidth();
+    this.setPowerUpContainerWidth();
+    this.setNewGameBtnWidth();
+    this.setMenuBtnWidth();
+    this.setSwapPopupWidth();
+  }
+
+
   init(size)
   {
     this.grid = Array(size).fill().map(() => Array(size).fill(null));
@@ -244,6 +301,9 @@ export default class Game2048
     this.undoBtnListener = null;
     this.shuffleBtnListener = null;
     this.swapBtnListener = null;
+    this.swapPopupChangeListener = null;
+    this.swapPopupCancelListener = null;
+    this.swapPopupDisapperListener = null;
     this.touchMoveListener = null;
     this.touchStartListener = null;
     this.touchEndListener = null;
@@ -262,6 +322,8 @@ export default class Game2048
     this.swapRemaining = this.maxSwapCount;
     this.updateSwapButton();
     this.isSwaping = false;
+    this.exitSwapMode();
+    this.tileEventListeners.clear();
 
     //remove existing tiles
     const existingTiles = board.querySelectorAll('.tile');
@@ -338,6 +400,14 @@ export default class Game2048
       swapBtn.addEventListener('click', this.swapBtnListener = () =>
       {
         this.swapTiles();
+      })
+    }
+
+    if (swapPopupCancelBtn)
+    {
+      swapPopupCancelBtn.addEventListener('click', this.swapPopupCancelListener = () =>
+      {
+        this.cancelSwap();
       })
     }
   }
@@ -457,6 +527,10 @@ export default class Game2048
     tileElement.id = `tile-${tile.id}`;
     tileElement.className = `tile tile-${tile.value}`;
 
+    const tileBlur = document.createElement('div');
+    tileBlur.className = 'tile-blur';
+    tileElement.appendChild(tileBlur);
+
     if (tile.isNew || isUndoAnimation)
     {
       tileElement.classList.add('tile-new');
@@ -465,7 +539,8 @@ export default class Game2048
     const { left, top } = this.getTileElementPosition(tile);
     tileElement.style.left = left + '%';
     tileElement.style.top = top + '%';
-    tileElement.textContent = tile.value;
+    const tileTextNode = document.createTextNode(tile.value);
+    tileElement.prepend(tileTextNode);
 
     board.appendChild(tileElement);
 
@@ -1000,33 +1075,13 @@ export default class Game2048
         const topInitial = parseFloat(tileElement.style.top);
         const { left, top } = this.getTileElementPosition(tile);
 
-        const offsetMult = 0.05;
-
-        //animate the element
-        const animation = tileElement.animate(
-          {
-            left: [`${leftInitial}%`, `${left + (left - leftInitial) * offsetMult}%`, `${left}%`],
-            top: [`${topInitial}%`, `${top + (top - topInitial) * offsetMult}%`, `${top}%`],
-            offset: [0, 0.8, 1]
-          },
-          {
-            duration: this.animationTimeMove,
-            fill: "forwards",
-            easing: "ease-out"
-          });
-
-        // set position after animation is complete
-        animation.finished.then(() =>
-        {
-          tileElement.style.left = `${left}%`;
-          tileElement.style.top = `${top}%`;
-        });
-
+        this.animateTile(tileElement, leftInitial, left, topInitial, top);
 
         // add merge class to merged tiles
         if (tile.merged)
         {
-          tileElement.textContent = tile.value;
+          // only change the number not the tileBlur div
+          tileElement.firstChild.textContent = tile.value;
           tileElement.className = `tile tile-${tile.value} tile-merged`;
           // in sec
           const mergeAnimationTime = parseFloat(getComputedStyle(tileElement).getPropertyValue('--ANIMATION-TIME-MERGE'));
@@ -1107,7 +1162,7 @@ export default class Game2048
 
   undo()
   {
-    if (!this.canUndo || this.gameStates.length === 0 || !this.isInputAllowed())
+    if (!this.canUndo || this.gameStates.length === 0 || !this.isInputAllowed() || this.isSwaping)
     {
       return;
     }
@@ -1204,27 +1259,7 @@ export default class Game2048
             tileElement.className = `tile tile-${tile.value}`;
           }
 
-
-          const offsetMult = 0.05;
-          // Animate to previous position
-          const animation = tileElement.animate(
-            {
-              left: [`${oldLeft}%`, `${newLeft + (newLeft - oldLeft) * offsetMult}%`, `${newLeft}%`],
-              top: [`${oldTop}%`, `${newTop + (newTop - oldTop) * offsetMult}%`, `${newTop}%`],
-              offset: [0, 0.8, 1]
-            },
-            {
-              duration: this.animationTimeMove,
-              fill: "forwards",
-              easing: "ease-out"
-            }
-          );
-
-          animation.finished.then(() =>
-          {
-            tileElement.style.left = `${newLeft}%`;
-            tileElement.style.top = `${newTop}%`;
-          });
+          this.animateTile(tileElement, oldLeft, newLeft, oldTop, newTop);
         }
       }
     });
@@ -1237,8 +1272,9 @@ export default class Game2048
 
     if (undoBtn)
     {
-      undoBtn.disabled = !this.canUndo;
-      undoBtn.style.opacity = this.canUndo ? '1' : '0.5';
+      const disable = !this.canUndo || this.isSwaping;
+      undoBtn.disabled = disable;
+      undoBtn.style.opacity = !disable ? '1' : '0.5';
     }
 
     if (undoBtnCount)
@@ -1253,7 +1289,7 @@ export default class Game2048
 
   shuffleTiles()
   {
-    if (!this.shuffleRemaining > 0)
+    if (!this.shuffleRemaining > 0 || this.isSwaping || !this.isInputAllowed())
     {
       return;
     }
@@ -1299,8 +1335,9 @@ export default class Game2048
 
     if (shuffleBtn)
     {
-      shuffleBtn.disabled = !(this.shuffleRemaining > 0);
-      shuffleBtn.style.opacity = this.shuffleRemaining > 0 ? '1' : '0.5';
+      const disable = (!(this.shuffleRemaining > 0) || this.isSwaping);
+      shuffleBtn.disabled = disable;
+      shuffleBtn.style.opacity = !disable ? '1' : '0.5';
     }
 
     if (shuffleBtnCount)
@@ -1321,9 +1358,6 @@ export default class Game2048
     }
 
     this.enterSwapMode();
-
-    this.swapRemaining--;
-    this.updateSwapButton();
   }
 
   updateSwapButton()
@@ -1346,31 +1380,199 @@ export default class Game2048
 
   enterSwapMode()
   {
+    this.saveGameState();
+
     this.isSwaping = true;
+    this.updateShuffleButton();
+    this.updateUndoButton();
 
     // show popup and hide score wrapper 
-    const swapPopup = document.querySelector('.swap-popup');
+    swapPopup.removeEventListener('transitionend', this.swapPopupDisapperListener);
     swapPopup.style.visibility = 'visible';
+    swapPopup.style.top = swapPopupTop;
     const scoreWrapper = document.querySelector('.score-wrapper');
     scoreWrapper.style.visibility = 'hidden';
 
     // visual changes
+    document.querySelectorAll('.tile-blur').forEach(tileBlur =>
+    {
+      tileBlur.style.visibility = 'visible';
+    });
+
     this.tiles.forEach(tile =>
     {
       const tileElement = board.querySelector(`#tile-${tile.id}`);
-      console.log(tileElement);
+      tileElement.addEventListener('mouseenter', this.scaleUpTile_Swap);
+      tileElement.addEventListener('mouseleave', this.scaleDownTile_Swap);
+      let eventlistener;
+      tileElement.addEventListener('click', eventlistener = (e) => this.selectTile_Swap.call(this, e));
+      this.tileEventListeners.set(tileElement, eventlistener);
     })
   }
 
   exitSwapMode()
   {
     this.isSwaping = false;
+    this.updateShuffleButton();
+    this.updateUndoButton();
 
     // remove popup and show score wrapper 
-    const swapPopup = document.querySelector('.swap-popup');
-    swapPopup.style.visibility = 'hidden';
-    const scoreWrapper = document.querySelector('.score-wrapper');
-    scoreWrapper.style.visibility = 'visible';
+    swapPopup.style.top = swapPopupMoveAmount;
+
+    swapPopup.addEventListener('transitionend', this.swapPopupDisapperListener = () =>
+    {
+      // reset popup
+      swapPopup.style.visibility = 'hidden';
+      const popupTextDiv = swapPopup.querySelector('.swap-popup__text .description');
+      popupTextDiv.textContent = "Choose the first tile";
+      const scoreWrapper = document.querySelector('.score-wrapper');
+      scoreWrapper.style.visibility = 'visible';
+    });
+
+    document.querySelectorAll('.tile-blur').forEach(tileBlur =>
+    {
+      tileBlur.style.visibility = 'hidden';
+    });
+
+    this.tiles.forEach(tile =>
+    {
+      const tileElement = board.querySelector(`#tile-${tile.id}`);
+      tileElement.removeEventListener('mouseenter', this.scaleUpTile_Swap);
+      tileElement.removeEventListener('mouseleave', this.scaleDownTile_Swap);
+      if (this.tileEventListeners.has(tileElement))
+      {
+        tileElement.removeEventListener('click', this.tileEventListeners.get(tileElement));
+        this.tileEventListeners.delete(tileElement);
+      }
+    });
+
+    this.tileEventListeners.clear();
+
+    // reset first tile if selected 
+    if (this.firstTile_Swap)
+    {
+      this.firstTile_Swap.style.transform = 'scale(1)';
+    }
+
+    // remove popup event listener 
+    if (this.swapPopupChangeListener)
+    {
+      swapPopup.removeEventListener('transitionend', this.swapPopupChangeListener);
+    }
+
+    this.firstTile_Swap = null;
+    this.secondTile_Swap = null;
+
+    this.updateSwapButton();
+  }
+
+  scaleUpTile_Swap(eventArgs)
+  {
+    eventArgs.target.style.transform = 'scale(1.1)';
+  }
+
+  scaleDownTile_Swap(eventArgs)
+  {
+    eventArgs.target.style.transform = 'scale(1)';
+  }
+
+  selectTile_Swap(eventArgs)
+  {
+    const tileElement = eventArgs.currentTarget;
+
+    if (!this.firstTile_Swap)
+    {
+      this.firstTile_Swap = tileElement;
+
+      //remove event listeners 
+      tileElement.removeEventListener('mouseenter', this.scaleUpTile_Swap);
+      tileElement.removeEventListener('mouseleave', this.scaleDownTile_Swap);
+      tileElement.removeEventListener('click', this.tileEventListeners.get(tileElement));
+
+      this.tileEventListeners.delete(tileElement);
+
+      // remove blur
+      tileElement.querySelector('.tile-blur').style.visibility = 'hidden';
+      tileElement.style.transform = 'scale(1.1)';
+
+      swapPopup.style.top = swapPopupMoveAmount;
+
+      // change popup text
+      swapPopup.addEventListener('transitionend', this.swapPopupChangeListener = () => 
+      {
+        const popupTextDiv = swapPopup.querySelector('.swap-popup__text .description');
+        popupTextDiv.textContent = "Choose the second tile";
+        swapPopup.style.top = swapPopupTop;
+      })
+    }
+
+    else
+    {
+      this.swapRemaining--;
+      this.secondTile_Swap = tileElement;
+
+      //remove event listeners 
+      tileElement.removeEventListener('mouseenter', this.scaleUpTile_Swap);
+      tileElement.removeEventListener('mouseleave', this.scaleDownTile_Swap);
+      tileElement.removeEventListener('click', this.tileEventListeners.get(tileElement));
+
+
+      this.tileEventListeners.delete(tileElement);
+
+      // remove blur
+      tileElement.querySelector('.tile-blur').style.visibility = 'hidden';
+      tileElement.style.transform = 'scale(1.1)';
+
+      // update the grid and tiles Map
+      const firstTileId = parseInt(this.firstTile_Swap.id.split("-")[1]);
+      const secondTileId = parseInt(this.secondTile_Swap.id.split("-")[1]);
+      const firstTile = this.tiles.get(firstTileId);
+      const secondTile = this.tiles.get(secondTileId);
+
+      const rowFirstTile = firstTile.row;
+      const colFirstTile = firstTile.col;
+
+      firstTile.row = secondTile.row;
+      firstTile.col = secondTile.col;
+      this.grid[secondTile.row][secondTile.col] = firstTile;
+
+      secondTile.row = rowFirstTile;
+      secondTile.col = colFirstTile;
+      this.grid[rowFirstTile][colFirstTile] = secondTile;
+
+      this.tiles.set(firstTileId, firstTile);
+      this.tiles.set(secondTileId, secondTile);
+
+
+      // animate the tile and exit swap mode 
+      const animation = this.animateSwap(this.firstTile_Swap, this.secondTile_Swap);
+      this.exitSwapMode();
+    }
+  }
+
+  animateSwap(firstTile_Swap, secondTile_Swap)
+  {
+    const firstTileInitialTop = parseFloat(firstTile_Swap.style.top);
+    const firstTileInitialLeft = parseFloat(firstTile_Swap.style.left);
+    const secondTileInitialTop = parseFloat(secondTile_Swap.style.top);
+    const secondTileInitialLeft = parseFloat(secondTile_Swap.style.left);
+
+    firstTile_Swap.style.transform = 'scale(1)';
+    secondTile_Swap.style.transform = 'scale(1)';
+
+
+    this.animateTile(firstTile_Swap, firstTileInitialLeft, secondTileInitialLeft, firstTileInitialTop, secondTileInitialTop);
+    return this.animateTile(secondTile_Swap, secondTileInitialLeft, firstTileInitialLeft, secondTileInitialTop, firstTileInitialTop);
+  }
+
+  cancelSwap()
+  {
+    // If no swap was made, remove the saved state
+    this.gameStates.pop();
+    this.canUndo = this.gameStates.length > 0 && this.undoRemaining > 0;
+    this.updateUndoButton();
+
+    this.exitSwapMode();
   }
 }
 
