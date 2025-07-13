@@ -18,12 +18,9 @@
     /* FONTS */
     --FF-H: "Zilap-Monograma", sans-serif;
     --FF: "Rubik", sans-serif;
-    /* --FS-P: clamp(1.5rem, 3vw + 0.8rem, 2.2rem);
-    --FS-S: clamp(1.3rem, 2.5vw + 0.8rem, 2rem);
-    --FS-T: clamp(1.3rem, 2.5vw + 0.8rem, 2rem); */
-    --FS-P: 3.3dvh;
-    --FS-S: 3dvh;
-    --FS-T: 2.7dvh;
+    --FS-P: calc(3.1dvh - ((var(--BOARD-SIZE) - 4) * 0.2dvh));
+    --FS-S: calc(2.8dvh - ((var(--BOARD-SIZE) - 4) * 0.2dvh));
+    --FS-T: calc(2.4dvh - ((var(--BOARD-SIZE) - 4) * 0.2dvh));
 
     /* COLORS */
     --BGCOLOR: #FBFFED;
@@ -36,11 +33,8 @@
 
     /* MISC */
     --BOARD-SIZE: 1;
-    /* --TILE-SIZE: clamp(3rem * var(--BOARD-SIZE-MULT), min(18dvw * var(--BOARD-SIZE-MULT), 20dvh * var(--BOARD-SIZE-MULT)), 4.5rem * var(--BOARD-SIZE-MULT)); */
     --TILE-SIZE: calc(43.1dvh * 15 / (17 * var(--BOARD-SIZE) + 2));
     --PADDING-BOARD: calc(var(--TILE-SIZE) / 15);
-    /* --BOARD-BORDER-RADIUS: clamp(1.2rem, 2.94dvh, 2rem);
-    --TILE-BORDER-RADIUS: clamp(0.7rem, 1.85dvh, 1.5rem); */
     --BOARD-BORDER-RADIUS: 2.94dvh;
     --TILE-BORDER-RADIUS: 1.85dvh;
     --ANIMATION-TIME-SPAWN: 0.2s;
