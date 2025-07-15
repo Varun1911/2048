@@ -113,6 +113,14 @@ function setupEventListeners()
 document.addEventListener("DOMContentLoaded", () =>
 {
     document.body.classList.remove("preload");
+    const title = document.querySelector('.header__h1');
+
+    // let browser to paint the intial state before updating transform
+    requestAnimationFrame(() =>
+    {
+        title.style.transform = 'translate(0, 0)';
+    });
+
     startGame(4);
     setupEventListeners();
     showPopup(popupGridSelection);

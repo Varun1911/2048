@@ -86,7 +86,10 @@ header {
     font-size: 6.54dvh;
     color: #415B4C;
     font-weight: normal;
+    transform: translate(0, -10dvh);
+    transition: transform 0.25s ease-out;
 }
+
 
 
 main {
@@ -647,11 +650,11 @@ footer {
 }
 
 
-@media screen and (max-width: 768px) {}
 
-
-@media screen and (min-width: 1024px) {}
-
-
-
-@media screen and (min-width: 1280px) {}
+@media screen and (max-width: 768px) 
+{
+    .power-up-info-popup
+    {
+    display: none;
+    }
+}

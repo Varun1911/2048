@@ -413,7 +413,6 @@ export default class Game2048
 
       undoBtn.addEventListener('mouseenter', this.undoMouseEnterListener = () =>
       {
-        console.log('show undo info');
         undoInfoPopup.style.opacity = '1';
       }
       );
@@ -434,11 +433,12 @@ export default class Game2048
       {
         this.shuffleTiles();
       });
+
       shuffleBtn.addEventListener('mouseenter', this.shuffleMouseEnterListener = () =>
       {
-        console.log('show shuffle info');
         shuffleInfoPopup.style.opacity = '1';
       });
+
       shuffleBtn.addEventListener('mouseleave', this.shuffleMouseLeaveListener = () =>
       {
         shuffleInfoPopup.style.opacity = '0';
@@ -454,12 +454,13 @@ export default class Game2048
       swapBtn.addEventListener('click', this.swapBtnListener = () =>
       {
         this.swapTiles();
-      })
+      });
+
       swapBtn.addEventListener('mouseenter', this.swapMouseEnterListener = () =>
       {
-        console.log('show swap info');
         swapInfoPopup.style.opacity = '1';
-      })
+      });
+
       swapBtn.addEventListener('mouseleave', this.swapMouseLeaveListener = () =>
       {
         swapInfoPopup.style.opacity = '0';
