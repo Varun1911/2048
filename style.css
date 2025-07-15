@@ -607,7 +607,7 @@ footer {
     justify-content: flex-end;
     align-items: center;
     gap: 1dvh;
-    flex-flow: column wrap;
+    flex-flow: column;
     height: 8dvw;
     color: #2D80B4;
     font-size: 1.5dvh;
