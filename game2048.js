@@ -7,6 +7,9 @@ const swapPopup = document.querySelector('.swap-popup');
 const swapPopupCancelBtn = swapPopup.querySelector('.swap-popup__cancel-btn');
 const swapPopupMoveAmount = '-1dvh';
 const swapPopupTop = '2dvh';
+const undoInfoPopup = document.querySelector('.undo-info-popup');
+const shuffleInfoPopup = document.querySelector('.shuffle-info-popup');
+const swapInfoPopup = document.querySelector('.swap-info-popup');
 
 
 export default class Game2048
@@ -50,8 +53,14 @@ export default class Game2048
     // to dispose event listeners
     this.keyDownListener;
     this.undoBtnListener;
+    this.undoMouseEnterListener;
+    this.undoMouseLeaveListener;
     this.shuffleBtnListener;
+    this.shuffleMouseEnterListener;
+    this.shuffleMouseLeaveListener;
     this.swapBtnListener;
+    this.swapMouseEnterListener;
+    this.swapMouseLeaveListener;
     this.swapPopupChangeListener;
     this.swapPopupCancelListener;
     this.swapPopupDisapperListener;
@@ -77,9 +86,26 @@ export default class Game2048
     const undoBtn = document.querySelector('.undo-btn');
     const shuffleBtn = document.querySelector('.shuffle-btn');
     const swapBtn = document.querySelector('.swap-btn');
-    if (undoBtn) undoBtn.removeEventListener('click', this.undoClickListener);
-    if (shuffleBtn) shuffleBtn.removeEventListener('click', this.shuffleBtnListener);
-    if (swapBtn) swapBtn.removeEventListener('click', this.swapBtnListener);
+    if (undoBtn) 
+    {
+      undoBtn.removeEventListener('click', this.undoClickListener);
+      undoBtn.removeEventListener('mouseenter', this.undoMouseEnterListener);
+      undoBtn.removeEventListener('mouseLeave', this.undoMouseLeaveListener);
+    }
+
+    if (shuffleBtn) 
+    {
+      shuffleBtn.removeEventListener('click', this.shuffleBtnListener);
+      shuffleBtn.removeEventListener('mouseenter', this.shuffleMouseEnterListener);
+      shuffleBtn.removeEventListener('mouseLeave', this.shuffleMouseLeaveListener);
+    }
+    if (swapBtn) 
+    {
+      swapBtn.removeEventListener('click', this.swapBtnListener);
+      swapBtn.removeEventListener('mouseenter', this.swapMouseEnterListener);
+      swapBtn.removeEventListener('mouseLeave', this.swapMouseLeaveListener);
+    }
+
     if (swapPopup) 
     {
       swapPopup.removeEventListener('transitionend', this.swapPopupChangeListener);
@@ -299,8 +325,14 @@ export default class Game2048
     // reset event listener variables
     this.keyDownListener = null;
     this.undoBtnListener = null;
+    this.undoMouseEnterListener = null;
+    this.undoMouseLeaveListener = null;
     this.shuffleBtnListener = null;
+    this.shuffleMouseEnterListener = null;
+    this.shuffleMouseLeaveListener = null;
     this.swapBtnListener = null;
+    this.swapMouseEnterListener = null;
+    this.swapMouseLeaveListener = null;
     this.swapPopupChangeListener = null;
     this.swapPopupCancelListener = null;
     this.swapPopupDisapperListener = null;
@@ -378,6 +410,18 @@ export default class Game2048
       {
         this.undo();
       });
+
+      undoBtn.addEventListener('mouseenter', this.undoMouseEnterListener = () =>
+      {
+        console.log('show undo info');
+        undoInfoPopup.style.opacity = '1';
+      }
+      );
+
+      undoBtn.addEventListener('mouseleave', this.undoMouseLeaveListener = () =>
+      {
+        undoInfoPopup.style.opacity = '0';
+      });
     }
 
 
@@ -389,7 +433,17 @@ export default class Game2048
       shuffleBtn.addEventListener('click', this.shuffleBtnListener = () =>
       {
         this.shuffleTiles();
-      })
+      });
+      shuffleBtn.addEventListener('mouseenter', this.shuffleMouseEnterListener = () =>
+      {
+        console.log('show shuffle info');
+        shuffleInfoPopup.style.opacity = '1';
+      });
+      shuffleBtn.addEventListener('mouseleave', this.shuffleMouseLeaveListener = () =>
+      {
+        shuffleInfoPopup.style.opacity = '0';
+      });
+
     }
 
 
@@ -400,6 +454,15 @@ export default class Game2048
       swapBtn.addEventListener('click', this.swapBtnListener = () =>
       {
         this.swapTiles();
+      })
+      swapBtn.addEventListener('mouseenter', this.swapMouseEnterListener = () =>
+      {
+        console.log('show swap info');
+        swapInfoPopup.style.opacity = '1';
+      })
+      swapBtn.addEventListener('mouseleave', this.swapMouseLeaveListener = () =>
+      {
+        swapInfoPopup.style.opacity = '0';
       })
     }
 

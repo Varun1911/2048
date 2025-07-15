@@ -240,11 +240,32 @@ main {
 .power-up-info-popup
 {
     position: absolute;
+    top: -7.32dvh;
     height: inherit;
     width: inherit;
     border-radius: inherit;
     background-color: var(--COLOR-GREEN);
     color: #fff;
+    box-shadow: 0 0 0.56dvh -0.14dvh rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+
+.power-up-info-popup__title
+{
+    font-size: 1.96dvh;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+
+.power-up-info-popup__description
+{
+    font-size: 1.52dvh;
 }
 
 .new-game-btn-container {
