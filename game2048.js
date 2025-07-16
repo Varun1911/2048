@@ -1444,6 +1444,7 @@ export default class Game2048
 
   enterSwapMode()
   {
+    this.allowInput = false;
     this.saveGameState();
 
     this.isSwaping = true;
@@ -1476,6 +1477,7 @@ export default class Game2048
 
   exitSwapMode()
   {
+    this.allowInput = true;
     this.isSwaping = false;
     this.updateShuffleButton();
     this.updateUndoButton();
