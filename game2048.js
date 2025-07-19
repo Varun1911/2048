@@ -1,8 +1,9 @@
-import { showPopup, isPopupOpened } from "./helper.js";
+import { showPopup, isPopupOpened, hidePopup } from "./helper.js";
 
 const popupGameOver = document.querySelector('.game-over-popup');
 const popupGameWon = document.querySelector('.game-won-popup');
 const board = document.querySelector('.board');
+const powerUpContainer = document.querySelector('.power-ups-container');
 const swapPopup = document.querySelector('.swap-popup');
 const swapPopupCancelBtn = swapPopup.querySelector('.swap-popup__cancel-btn');
 const swapPopupMoveAmount = '-1dvh';
@@ -10,6 +11,7 @@ const swapPopupTop = '2dvh';
 const undoInfoPopup = document.querySelector('.undo-info-popup');
 const shuffleInfoPopup = document.querySelector('.shuffle-info-popup');
 const swapInfoPopup = document.querySelector('.swap-info-popup');
+const animationTimeSpawn = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ANIMATION-TIME-SPAWN'));
 
 
 export default class Game2048
@@ -136,8 +138,8 @@ export default class Game2048
   {
     //*for testing
     // return Math.random() < 0.9 ? 1024 : 512;
-    // let arr = [2, 4, 8, 16, 32, 64, 128, 256, 512];
-    // return arr[Math.floor(Math.random() * arr.length)];
+    let arr = [2, 4, 8, 16, 32, 64, 128, 256, 512];
+    return arr[Math.floor(Math.random() * arr.length)];
 
     return Math.random() < 0.9 ? 2 : 4;
   }
@@ -189,8 +191,6 @@ export default class Game2048
 
   setPowerUpContainerWidth()
   {
-    const powerUpContainer = document.querySelector('.power-ups-container');
-
     let width = board.getBoundingClientRect().width;
 
     if (board && powerUpContainer)
@@ -362,6 +362,27 @@ export default class Game2048
     existingTiles.forEach(item => item.remove());
 
     // Add two initial tiles
+    this.addNewTile();
+    this.addNewTile();
+
+    this.addNewTile();
+    this.addNewTile();
+
+    this.addNewTile();
+    this.addNewTile();
+
+    this.addNewTile();
+    this.addNewTile();
+
+    this.addNewTile();
+    this.addNewTile();
+
+    this.addNewTile();
+    this.addNewTile();
+
+    this.addNewTile();
+    this.addNewTile();
+
     this.addNewTile();
     this.addNewTile();
 
@@ -609,8 +630,6 @@ export default class Game2048
     board.appendChild(tileElement);
 
     // Remove new class after animation
-    const animationTimeSpawn = parseFloat(getComputedStyle(tileElement).getPropertyValue('--ANIMATION-TIME-SPAWN'));
-
 
     if (tile.isNew)
     {
@@ -665,8 +684,6 @@ export default class Game2048
       // animate to new positions
       this.animateTiles();
 
-      const animationTimeSpawn = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ANIMATION-TIME-SPAWN')) * 1000;
-
       // check game state and add tile
       setTimeout(() =>
       {
@@ -688,13 +705,7 @@ export default class Game2048
 
         else if (this.isGameOver())
         {
-          this.gameOver = true;
-
-          //to allow new tile to spawn
-          setTimeout(() =>
-          {
-            this.showGameOver();
-          }, animationTimeSpawn);
+          this.setGameOver();
         }
 
       }, this.animationTimeMove);
@@ -1128,6 +1139,7 @@ export default class Game2048
 
   animateTiles() 
   {
+    let animation;
     this.tiles.forEach(tile => 
     {
       const tileElement = document.querySelector(`#tile-${tile.id}`);
@@ -1139,7 +1151,7 @@ export default class Game2048
         const topInitial = parseFloat(tileElement.style.top);
         const { left, top } = this.getTileElementPosition(tile);
 
-        this.animateTile(tileElement, leftInitial, left, topInitial, top);
+        animation = this.animateTile(tileElement, leftInitial, left, topInitial, top);
 
         // add merge class to merged tiles
         if (tile.merged)
@@ -1161,6 +1173,7 @@ export default class Game2048
     );
 
     this.updateDisplay();
+    return animation;
   }
 
   showGameWon()
@@ -1178,6 +1191,51 @@ export default class Game2048
     showPopup(popupGameOver);
   }
 
+
+  hideGameOver()
+  {
+    hidePopup(popupGameOver);
+  }
+
+  resetOnPowerUp()
+  {
+    if (isPopupOpened)
+    {
+      this.hideGameOver();
+      this.gameOver = false;
+      this.UnhighlightPowerUpBar();
+    }
+  }
+
+  highlightPowerUpBar()
+  {
+    if (this.undoRemaining > 0 || this.shuffleRemaining > 0 || this.swapRemaining > 0)
+    {
+      // highlight
+      // powerUpContainer.classList.add('glow');
+      powerUpContainer.style.zIndex = '8';
+    }
+  }
+
+
+  UnhighlightPowerUpBar()
+  {
+    powerUpContainer.style.zIndex = '0';
+  }
+
+
+  setGameOver()
+  {
+    this.gameOver = true;
+
+    //to allow new tile to spawn
+    setTimeout(() =>
+    {
+      this.showGameOver();
+      this.highlightPowerUpBar();
+    }, animationTimeSpawn);
+
+  }
 
   // *UNDO Powerup
 
@@ -1226,11 +1284,14 @@ export default class Game2048
 
   undo()
   {
-    if (!this.canUndo || this.gameStates.length === 0 || !this.isInputAllowed() || this.isSwaping)
+    if (!this.canUndo || this.gameStates.length === 0 || this.isSwaping)
     {
       return;
     }
 
+    console.log("Undo");
+
+    this.resetOnPowerUp();
     this.moveCount--;
     this.undoRemaining--;
     this.allowInput = false;
@@ -1353,10 +1414,14 @@ export default class Game2048
 
   shuffleTiles()
   {
-    if (!this.shuffleRemaining > 0 || this.isSwaping || !this.isInputAllowed())
+    if (!this.shuffleRemaining > 0 || this.isSwaping)
     {
       return;
     }
+
+    console.log("shuffle");
+
+    this.resetOnPowerUp();
 
     this.saveGameState();
 
@@ -1384,8 +1449,19 @@ export default class Game2048
     }
     )
 
-    this.animateTiles();
+    const animation = this.animateTiles();
     this.grid = newGrid;
+
+    if (animation)
+    {
+      animation.finished.then(() => 
+      {
+        if (this.isGameOver())
+        {
+          this.setGameOver();
+        }
+      });
+    }
 
     this.shuffleRemaining--;
     this.updateShuffleButton();
@@ -1421,6 +1497,8 @@ export default class Game2048
       return;
     }
 
+    console.log("swap");
+    this.resetOnPowerUp();
     this.enterSwapMode();
   }
 
@@ -1612,6 +1690,13 @@ export default class Game2048
 
       // animate the tile and exit swap mode 
       const animation = this.animateSwap(this.firstTile_Swap, this.secondTile_Swap);
+      animation.finished.then(() => 
+      {
+        if (this.isGameOver())
+        {
+          this.setGameOver();
+        }
+      })
       this.exitSwapMode();
     }
   }
