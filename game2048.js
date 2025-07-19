@@ -71,6 +71,8 @@ export default class Game2048
     this.touchStartListener;
     this.touchEndListener;
 
+    this.glowTimeout = null;
+
     this.createBoardUI(BOARD_SIZE)
     this.init(BOARD_SIZE);
     this.setupEventListeners();
@@ -339,6 +341,8 @@ export default class Game2048
     this.touchMoveListener = null;
     this.touchStartListener = null;
     this.touchEndListener = null;
+
+    this.glowTimeout = null;
 
     // Clear undo history on new game
     this.gameStates = [];
@@ -1212,15 +1216,30 @@ export default class Game2048
     if (this.undoRemaining > 0 || this.shuffleRemaining > 0 || this.swapRemaining > 0)
     {
       // highlight
-      // powerUpContainer.classList.add('glow');
-      powerUpContainer.style.zIndex = '8';
+      const powerUpContainerWrapper = document.querySelector('.power-ups-container-wrapper');
+      powerUpContainerWrapper.style.zIndex = '8';
+      powerUpContainerWrapper.classList.add('glow');
+
+      // const glowTime = 3000;
+      // const iterationCount = 1;
+      // this.glowTimeout = setTimeout(() =>
+      // {
+      //   powerUpContainerWrapper.classList.remove('glow');
+      // }, glowTime * iterationCount);
     }
   }
 
 
   UnhighlightPowerUpBar()
   {
-    powerUpContainer.style.zIndex = '0';
+    if (this.glowTimeout)
+    {
+      clearTimeout(this.glowTimeout);
+      this.glowTimeout = null;
+    }
+    const powerUpContainerWrapper = document.querySelector('.power-ups-container-wrapper');
+    powerUpContainerWrapper.style.zIndex = '0';
+    powerUpContainerWrapper.classList.remove('glow');
   }
 
 

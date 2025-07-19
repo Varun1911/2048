@@ -88,6 +88,7 @@ function setupEventListeners()
         // to prevent closing the menu if button is not clicked
         if (e.target.closest('.menu-popup__btn'))
         {
+            game.UnhighlightPowerUpBar();
             hidePopup(popupGameOver);
         }
 
