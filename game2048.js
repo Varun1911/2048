@@ -159,7 +159,7 @@ export default class Game2048
     if (!encrypted) return 0;
 
     const decrypted = this.xorDecrypt(encrypted);
-    if (decrypted && typeof parseInt(decrypted) === 'number')
+    if (decrypted && !Number.isNaN(parseInt(decrypted)))
     {
       return parseInt(decrypted);
     }
