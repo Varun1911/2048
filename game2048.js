@@ -22,6 +22,7 @@ export default class Game2048
     this.BOARD_SIZE = BOARD_SIZE;
     this.grid = [];
     this.score = 0;
+    this.XOR_Key = 'ScoreSecretKey';
     this.best = this.getBestScoreFromStorage();
     this.gameWon = false;
     this.gameOver = false;
@@ -124,15 +125,52 @@ export default class Game2048
     return this.allowInput && !isPopupOpened;
   }
 
+  xorEncrypt(data)
+  {
+    let result = '';
+    for (let i = 0; i < data.length; i++)
+    {
+      result += String.fromCharCode(data.charCodeAt(i) ^ this.XOR_Key.charCodeAt(i % this.XOR_Key.length));
+    }
+    return btoa(result);
+  }
+
+  xorDecrypt(encryptedData)
+  {
+    try
+    {
+      const data = atob(encryptedData);
+      let result = '';
+      for (let i = 0; i < data.length; i++)
+      {
+        result += String.fromCharCode(data.charCodeAt(i) ^ this.XOR_Key.charCodeAt(i % this.XOR_Key.length));
+      }
+      return result;
+    } catch (e)
+    {
+      return null;
+    }
+  }
+
+
   getBestScoreFromStorage()
   {
-    return parseInt(localStorage.getItem(`best2048_${this.BOARD_SIZE}`) || '0')
+    const encrypted = localStorage.getItem(`best2048_${this.BOARD_SIZE}`);
+    if (!encrypted) return 0;
+
+    const decrypted = this.xorDecrypt(encrypted);
+    if (decrypted && typeof parseInt(decrypted) === 'number')
+    {
+      return parseInt(decrypted);
+    }
+    return 0;
   }
 
 
   setBestScoreInStorage()
   {
-    localStorage.setItem(`best2048_${this.BOARD_SIZE}`, this.best);
+    const encrypted = this.xorEncrypt(this.best.toString());
+    localStorage.setItem(`best2048_${this.BOARD_SIZE}`, encrypted);
   }
 
 
@@ -1308,7 +1346,6 @@ export default class Game2048
       return;
     }
 
-    console.log("Undo");
 
     this.resetOnPowerUp();
     this.moveCount--;
@@ -1438,8 +1475,6 @@ export default class Game2048
       return;
     }
 
-    console.log("shuffle");
-
     this.resetOnPowerUp();
 
     this.saveGameState();
@@ -1516,7 +1551,6 @@ export default class Game2048
       return;
     }
 
-    console.log("swap");
     this.resetOnPowerUp();
     this.enterSwapMode();
   }
