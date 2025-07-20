@@ -222,13 +222,13 @@ main {
 
 .power-ups-container-wrapper.glow::before,
 .power-ups-container-wrapper.glow::after {
-    --color: red;
+    --color: #FF816B;
     background-image: conic-gradient(from var(--angle),
             transparent 0% 40%,
             var(--color) 40% 50%,
             transparent 50% 90%,
             var(--color) 90% 100%);
-    animation: glow-border 3s linear infinite;
+    animation: glow-border 3s linear 2;
 }
 
 @keyframes glow-border {

@@ -1258,12 +1258,12 @@ export default class Game2048
       powerUpContainerWrapper.style.zIndex = '8';
       powerUpContainerWrapper.classList.add('glow');
 
-      // const glowTime = 3000;
-      // const iterationCount = 1;
-      // this.glowTimeout = setTimeout(() =>
-      // {
-      //   powerUpContainerWrapper.classList.remove('glow');
-      // }, glowTime * iterationCount);
+      const glowTime = 3000;
+      const iterationCount = 2;
+      this.glowTimeout = setTimeout(() =>
+      {
+        powerUpContainerWrapper.classList.remove('glow');
+      }, glowTime * iterationCount);
     }
   }
 
