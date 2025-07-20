@@ -178,8 +178,8 @@ export default class Game2048
   {
     //*for testing
     // return Math.random() < 0.9 ? 1024 : 512;
-    let arr = [2, 4, 8, 16, 32, 64, 128, 256, 512];
-    return arr[Math.floor(Math.random() * arr.length)];
+    // let arr = [2, 4, 8, 16, 32, 64, 128, 256, 512];
+    // return arr[Math.floor(Math.random() * arr.length)];
 
     return Math.random() < 0.9 ? 2 : 4;
   }
@@ -404,27 +404,6 @@ export default class Game2048
     existingTiles.forEach(item => item.remove());
 
     // Add two initial tiles
-    this.addNewTile();
-    this.addNewTile();
-
-    this.addNewTile();
-    this.addNewTile();
-
-    this.addNewTile();
-    this.addNewTile();
-
-    this.addNewTile();
-    this.addNewTile();
-
-    this.addNewTile();
-    this.addNewTile();
-
-    this.addNewTile();
-    this.addNewTile();
-
-    this.addNewTile();
-    this.addNewTile();
-
     this.addNewTile();
     this.addNewTile();
 
